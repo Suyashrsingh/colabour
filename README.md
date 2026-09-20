@@ -198,6 +198,38 @@ The project includes a ready-to-use [`vercel.json`](./vercel.json) that automati
 
 ---
 
+## 🔄 CI/CD Pipeline & Automatic Deployment on Push
+
+The project includes an automated Continuous Integration & Continuous Deployment (CI/CD) pipeline via **GitHub Actions** (`.github/workflows/ci-cd.yml`).
+
+### How Automatic Deployment Works
+
+Every time you run `git push origin main`:
+
+```mermaid
+flowchart LR
+    A[git push origin main] --> B[GitHub Actions Runner]
+    B --> C[Type Check tsc --noEmit]
+    C --> D[Production Build vite build]
+    D --> E[Automatic Deploy to Vercel]
+    E --> F[Live Production URL]
+```
+
+1. **Continuous Integration (Automated Verification):**
+   - **Type Checking:** Runs `npm run check` (`tsc --noEmit`) to verify zero TypeScript errors.
+   - **Build Validation:** Runs `npm run build` to ensure all frontend assets and backend modules compile cleanly.
+
+2. **Continuous Deployment (Two Supported Methods):**
+   - **Method 1: Native Vercel Integration (Zero Config):**
+     When your GitHub repository is connected to Vercel via the Vercel Dashboard, Vercel automatically detects the push and deploys the update immediately to your live production domain.
+   - **Method 2: GitHub Actions Automated Deploy:**
+     If you want GitHub Actions to deploy directly to Vercel, navigate to **GitHub Repository Settings** > **Secrets and variables** > **Actions**, and add:
+     - `VERCEL_TOKEN`: Your Vercel personal access token (from [Vercel Account Settings > Tokens](https://vercel.com/account/tokens)).
+     - `VERCEL_ORG_ID`: Found in your Vercel team/account settings.
+     - `VERCEL_PROJECT_ID`: Found in your Vercel project settings.
+
+---
+
 ## 🔒 Security & Statutory Architecture
 
 - **Row Level Security (RLS)**: Enforced directly at the PostgreSQL layer in Supabase.
