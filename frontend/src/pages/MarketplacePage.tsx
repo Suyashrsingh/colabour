@@ -8,7 +8,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useDemoStore, isWorkerBusy } from "@/contexts/DemoStoreContext";
 import { BrandLockup } from "@/components/BrandMark";
 import LandingHeader from "@/components/LandingHeader";
-import { MARKETPLACE_CATEGORIES, MARKETPLACE_CITIES, type MarketplaceWorker } from "@/data/marketplaceWorkers";
+import {
+  MARKETPLACE_CATEGORIES,
+  MARKETPLACE_CITIES,
+  MARKETPLACE_WORKERS,
+  type MarketplaceWorker,
+} from "@/data/marketplaceWorkers";
 import "@/landing-page.css";
 
 // ── Accent colours matching the app shell avatar system ──────────────────────
@@ -174,41 +179,118 @@ export default function MarketplacePage() {
   const initParams = useMemo(() => {
     try {
       const p = new URLSearchParams(window.location.search);
-      return { service: p.get("service") ?? "", locality: p.get("locality") ?? "" };
-    } catch { return { service: "", locality: "" }; }
+      const rawService = (p.get("service") ?? "").trim();
+      const rawLocality = (p.get("locality") ?? "").trim();
+
+      // Normalize service category
+      let resolvedCategory = "All categories";
+      if (rawService) {
+        if (rawService.toLowerCase() === "cleaner") {
+          resolvedCategory = "Home Cleaning";
+        } else {
+          const match = MARKETPLACE_CATEGORIES.find(
+            c => c.toLowerCase() === rawService.toLowerCase()
+          );
+          if (match) resolvedCategory = match;
+        }
+      }
+
+      // Resolve city & locality query
+      let resolvedCity = "All cities";
+      let resolvedQuery = "";
+
+      if (rawLocality) {
+        const lowerLoc = rawLocality.toLowerCase();
+
+        // 1. Direct city match (e.g. "pune" -> "Pune", "mumbai" -> "Mumbai", "gurugram" -> "Gurugram")
+        const matchedCity = MARKETPLACE_CITIES.find(
+          c => c !== "All cities" && c.toLowerCase() === lowerLoc
+        );
+
+        if (matchedCity) {
+          resolvedCity = matchedCity;
+          resolvedQuery = "";
+        } else if (lowerLoc === "delhi" || lowerLoc === "gurgaon" || lowerLoc === "noida") {
+          resolvedCity = "Gurugram";
+          resolvedQuery = "";
+        } else {
+          // 2. Contains city name (e.g. "Kothrud, Pune" or "Andheri, Mumbai")
+          let cityFound = false;
+          for (const c of MARKETPLACE_CITIES) {
+            if (c !== "All cities" && lowerLoc.includes(c.toLowerCase())) {
+              resolvedCity = c;
+              cityFound = true;
+              resolvedQuery = rawLocality.replace(new RegExp(`,?\\s*${c}\\b`, "i"), "").trim();
+              break;
+            }
+          }
+          // 3. Known area lookup in marketplace workers (e.g. "Kothrud" -> Pune)
+          if (!cityFound) {
+            const workerInArea = MARKETPLACE_WORKERS.find(
+              w => w.area.toLowerCase().includes(lowerLoc)
+            );
+            if (workerInArea) {
+              resolvedCity = workerInArea.city;
+              resolvedQuery = rawLocality;
+            } else {
+              resolvedQuery = rawLocality;
+            }
+          }
+        }
+      }
+
+      return {
+        category: resolvedCategory,
+        city: resolvedCity,
+        query: resolvedQuery,
+      };
+    } catch {
+      return { category: "All categories", city: "All cities", query: "" };
+    }
   }, []);
 
-  const [query, setQuery]       = useState(initParams.locality || initParams.service);
-  const [category, setCategory] = useState(initParams.service && MARKETPLACE_CATEGORIES.includes(initParams.service as typeof MARKETPLACE_CATEGORIES[number]) ? initParams.service : "All categories");
-  const [city, setCity]         = useState<string>("All cities");
+  const [category, setCategory]         = useState(initParams.category);
+  const [city, setCity]                 = useState<string>(initParams.city);
+  const [query, setQuery]               = useState(initParams.query);
   const [verifiedOnly, setVerifiedOnly] = useState(true);
   const [availableNow, setAvailableNow] = useState(false);
   const [emergency, setEmergency]       = useState(false);
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [sortBy, setSortBy]             = useState<"match" | "rating" | "jobs" | "price">("match");
+  const [mobileFiltersCollapsed, setMobileFiltersCollapsed] = useState(false);
 
-  // Filter workers from real verified workers
+  // Combine dynamic verified workers and rich marketplace catalog
   const filtered = useMemo(() => {
-    let list: MarketplaceWorker[] = verifiedWorkers.map((w) => ({
-      id: w.id,
-      name: w.name,
-      initials: w.initials,
-      service: w.service,
-      area: w.area,
-      city: "Gurugram",
-      years: w.years,
-      rating: w.rating,
-      jobs: w.jobs,
-      rate: w.rate,
-      accent: (["blue", "forest", "brass", "sage"].includes(w.accent) ? w.accent : "forest") as "blue" | "forest" | "brass" | "sage",
-      available: w.available,
-      languages: "Hindi, English",
-      matchScore: 90,
-      responseTime: "< 15 mins",
-      tier: "Verified Cooperative Member",
-      reviews: [],
-    }));
-    if (city !== "All cities") list = list.filter(w => w.city === city);
-    if (category !== "All categories") list = list.filter(w => w.service === category);
+    const dynamicList: MarketplaceWorker[] = verifiedWorkers.map((w) => {
+      let workerCity = "Gurugram";
+      if (w.area) {
+        if (/pune/i.test(w.area)) workerCity = "Pune";
+        else if (/mumbai/i.test(w.area)) workerCity = "Mumbai";
+        else if (/gurugram|delhi|noida|gurgaon/i.test(w.area)) workerCity = "Gurugram";
+      }
+      return {
+        id: w.id,
+        name: w.name,
+        initials: w.initials,
+        service: w.service,
+        area: w.area,
+        city: workerCity,
+        years: w.years,
+        rating: w.rating,
+        jobs: w.jobs,
+        rate: w.rate,
+        accent: (["blue", "forest", "brass", "sage"].includes(w.accent) ? w.accent : "forest") as "blue" | "forest" | "brass" | "sage",
+        available: w.available,
+        languages: "Hindi, English",
+        matchScore: 94,
+      };
+    });
+
+    const existingNames = new Set(dynamicList.map(w => w.name.toLowerCase()));
+    const staticList = MARKETPLACE_WORKERS.filter(w => !existingNames.has(w.name.toLowerCase()));
+    let list: MarketplaceWorker[] = [...dynamicList, ...staticList];
+
+    if (city !== "All cities") list = list.filter(w => w.city.toLowerCase() === city.toLowerCase());
+    if (category !== "All categories") list = list.filter(w => w.service.toLowerCase() === category.toLowerCase());
     if (availableNow) list = list.filter(w => w.available === "Available today" && !isWorkerBusy(w, bookings));
     if (query.trim()) {
       const q = query.toLowerCase();
@@ -216,15 +298,27 @@ export default function MarketplacePage() {
         `${w.name} ${w.service} ${w.area} ${w.city} ${w.languages}`.toLowerCase().includes(q)
       );
     }
-    // Available workers first, then by match score
+
     return [...list].sort((a, b) => {
       const aBusy = isWorkerBusy(a, bookings);
       const bBusy = isWorkerBusy(b, bookings);
       if (aBusy && !bBusy) return 1;
       if (!aBusy && bBusy) return -1;
+
+      if (sortBy === "rating") {
+        return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0);
+      }
+      if (sortBy === "jobs") {
+        return b.jobs - a.jobs;
+      }
+      if (sortBy === "price") {
+        const pA = parseInt(a.rate.replace(/\D/g, ""), 10) || 0;
+        const pB = parseInt(b.rate.replace(/\D/g, ""), 10) || 0;
+        return pA - pB;
+      }
       return b.matchScore - a.matchScore;
     });
-  }, [verifiedWorkers, query, category, city, availableNow, emergency, bookings]);
+  }, [verifiedWorkers, query, category, city, availableNow, emergency, bookings, sortBy]);
 
   const handleBook = () => {
     if (profile) {
@@ -237,8 +331,6 @@ export default function MarketplacePage() {
 
   const handleSignIn  = () => setLocation("/app?access=1&intent=signin");
   const handleSignUp  = () => setLocation("/app?access=1&intent=signup");
-
-  const [mobileFiltersCollapsed, setMobileFiltersCollapsed] = useState(false);
 
   const clearFilters = () => {
     setQuery(""); setCategory("All categories"); setCity("All cities");
@@ -298,64 +390,85 @@ export default function MarketplacePage() {
 
           {!mobileFiltersCollapsed && (
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              {/* 1. Service Category */}
               <label style={{ display: "block" }}>
-                <span style={{ fontSize: 11, fontWeight: 600, color: "var(--ink)", display: "block", marginBottom: 6 }}>Service or skill</span>
+                <span style={{ fontSize: 11, fontWeight: 600, color: "var(--ink)", display: "block", marginBottom: 6 }}>
+                  Service category
+                </span>
                 <div style={{ position: "relative" }}>
-                  <Search size={14} style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)", color: "var(--muted-foreground)", pointerEvents: "none" }} />
+                  <select
+                    value={category}
+                    onChange={e => setCategory(e.target.value)}
+                    style={{
+                      width: "100%", padding: "9px 28px 9px 11px",
+                      border: "1px solid var(--border)", borderRadius: 9,
+                      fontSize: 12, color: "var(--ink)", background: "var(--ivory)",
+                      appearance: "none", outline: "none", cursor: "pointer", boxSizing: "border-box",
+                    }}
+                  >
+                    <option>All categories</option>
+                    {MARKETPLACE_CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                  </select>
+                  <ChevronDown size={14} style={{ position: "absolute", right: 9, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--muted-foreground)" }} />
+                </div>
+              </label>
+
+              {/* 2. City */}
+              <label style={{ display: "block" }}>
+                <span style={{ fontSize: 11, fontWeight: 600, color: "var(--ink)", display: "block", marginBottom: 6 }}>
+                  City
+                </span>
+                <div style={{ position: "relative" }}>
+                  <select
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
+                    style={{
+                      width: "100%", padding: "9px 28px 9px 11px",
+                      border: "1px solid var(--border)", borderRadius: 9,
+                      fontSize: 12, color: "var(--ink)", background: "var(--ivory)",
+                      appearance: "none", outline: "none", cursor: "pointer", boxSizing: "border-box",
+                    }}
+                  >
+                    {MARKETPLACE_CITIES.map(c => <option key={c}>{c}</option>)}
+                  </select>
+                  <ChevronDown size={14} style={{ position: "absolute", right: 9, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--muted-foreground)" }} />
+                </div>
+              </label>
+
+              {/* 3. Area / Locality search */}
+              <label style={{ display: "block" }}>
+                <span style={{ fontSize: 11, fontWeight: 600, color: "var(--ink)", display: "block", marginBottom: 6 }}>
+                  Area or locality
+                </span>
+                <div style={{ position: "relative" }}>
+                  <MapPin size={14} style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)", color: "var(--muted-foreground)", pointerEvents: "none" }} />
                   <input
                     value={query}
                     onChange={e => setQuery(e.target.value)}
-                    placeholder="e.g. wiring, cleaning, pune"
+                    placeholder="e.g. Kothrud, Bandra, wiring"
                     style={{
-                      width: "100%", padding: "9px 11px 9px 33px",
+                      width: "100%", padding: query ? "9px 30px 9px 33px" : "9px 11px 9px 33px",
                       border: "1px solid var(--border)", borderRadius: 9,
                       fontSize: 12, color: "var(--ink)", background: "var(--ivory)",
                       outline: "none", boxSizing: "border-box",
                     }}
                   />
+                  {query && (
+                    <button
+                      type="button"
+                      onClick={() => setQuery("")}
+                      style={{
+                        position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)",
+                        background: "none", border: "none", padding: 2, cursor: "pointer",
+                        color: "var(--muted-foreground)", display: "flex", alignItems: "center",
+                      }}
+                      aria-label="Clear area search"
+                    >
+                      <X size={13} />
+                    </button>
+                  )}
                 </div>
               </label>
-
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12 }}>
-                <label style={{ display: "block" }}>
-                  <span style={{ fontSize: 11, fontWeight: 600, color: "var(--ink)", display: "block", marginBottom: 6 }}>City</span>
-                  <div style={{ position: "relative" }}>
-                    <select
-                      value={city}
-                      onChange={e => setCity(e.target.value)}
-                      style={{
-                        width: "100%", padding: "9px 28px 9px 11px",
-                        border: "1px solid var(--border)", borderRadius: 9,
-                        fontSize: 12, color: "var(--ink)", background: "var(--ivory)",
-                        appearance: "none", outline: "none", cursor: "pointer", boxSizing: "border-box",
-                      }}
-                    >
-                      {MARKETPLACE_CITIES.map(c => <option key={c}>{c}</option>)}
-                    </select>
-                    <ChevronDown size={14} style={{ position: "absolute", right: 9, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--muted-foreground)" }} />
-                  </div>
-                </label>
-
-                <label style={{ display: "block" }}>
-                  <span style={{ fontSize: 11, fontWeight: 600, color: "var(--ink)", display: "block", marginBottom: 6 }}>Category</span>
-                  <div style={{ position: "relative" }}>
-                    <select
-                      value={category}
-                      onChange={e => setCategory(e.target.value)}
-                      style={{
-                        width: "100%", padding: "9px 28px 9px 11px",
-                        border: "1px solid var(--border)", borderRadius: 9,
-                        fontSize: 12, color: "var(--ink)", background: "var(--ivory)",
-                        appearance: "none", outline: "none", cursor: "pointer", boxSizing: "border-box",
-                      }}
-                    >
-                      <option>All categories</option>
-                      {MARKETPLACE_CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                    </select>
-                    <ChevronDown size={14} style={{ position: "absolute", right: 9, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--muted-foreground)" }} />
-                  </div>
-                </label>
-              </div>
 
               <div style={{ borderTop: "1px solid var(--border)", paddingTop: 14, display: "flex", flexWrap: "wrap", gap: 12 }}>
                 {[
@@ -394,15 +507,19 @@ export default function MarketplacePage() {
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 11, color: "var(--muted-foreground)" }}>Sort by</span>
-              <select style={{
-                border: "1px solid var(--border)", borderRadius: 8, padding: "6px 28px 6px 10px",
-                fontSize: 11, color: "var(--ink)", background: "var(--paper)", outline: "none",
-                cursor: "pointer",
-              }}>
-                <option>Best match</option>
-                <option>Highest rated</option>
-                <option>Most jobs</option>
-                <option>Lowest price</option>
+              <select
+                value={sortBy}
+                onChange={e => setSortBy(e.target.value as "match" | "rating" | "jobs" | "price")}
+                style={{
+                  border: "1px solid var(--border)", borderRadius: 8, padding: "6px 28px 6px 10px",
+                  fontSize: 11, color: "var(--ink)", background: "var(--paper)", outline: "none",
+                  cursor: "pointer",
+                }}
+              >
+                <option value="match">Best match</option>
+                <option value="rating">Highest rated</option>
+                <option value="jobs">Most jobs</option>
+                <option value="price">Lowest price</option>
               </select>
             </div>
           </div>
