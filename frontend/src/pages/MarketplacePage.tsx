@@ -197,7 +197,7 @@ export default function MarketplacePage() {
       rating: w.rating,
       jobs: w.jobs,
       rate: w.rate,
-      accent: w.accent,
+      accent: (["blue", "forest", "brass", "sage"].includes(w.accent) ? w.accent : "forest") as "blue" | "forest" | "brass" | "sage",
       available: w.available,
       languages: "Hindi, English",
       matchScore: 90,

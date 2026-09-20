@@ -278,6 +278,7 @@ const initialRatingComments: Record<string, string> = {};
 const initialIssues: DemoIssue[] = [];
 const initialSocieties: DemoSociety[] = [];
 const initialCustomers: DemoCustomerProfile[] = [];
+const initialWorkerEarningsPrivacy: Record<string, boolean> = {};
 const initialClaims: DemoClaim[] = [];
 const initialNewPendingWorkers: DemoWorkerRegistration[] = [];
 
@@ -1094,7 +1095,7 @@ function normalizePaymentMethod(method?: string): "UPI" | "Card" | "Cash" | "Net
           societyCode: generatedCode,
           status: "Approved" as const,
           verifiedAt,
-          verificationBadge: verificationBadge as const,
+          verificationBadge: "Verified RCS Charter",
           auditedBy: signatoryOfficial,
         };
       }

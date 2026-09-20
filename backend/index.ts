@@ -1,5 +1,6 @@
 import express from "express";
 import { createServer } from "http";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -33,9 +34,9 @@ async function startServer() {
     }
   });
 
-  // Serve static files from dist/public in production
+  // Serve static files from dist/public
   const staticPath =
-    process.env.NODE_ENV === "production"
+    fs.existsSync(path.resolve(__dirname, "public"))
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 

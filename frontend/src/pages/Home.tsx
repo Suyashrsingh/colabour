@@ -61,7 +61,38 @@ function Status({ value }: { value: string }) {
   const tone = value === "Completed" || value === "Verified" || value === "Available today" ? "good" : value === "Emergency" || value === "Rejected" ? "urgent" : value === "Requested" || value === "Pending verification" ? "pending" : "info";
   return <span className={`status status-${tone}`}><i />{value}</span>;
 }
-function Button({ children, variant = "primary", onClick, icon }: { children: React.ReactNode; variant?: "primary" | "secondary" | "quiet" | "danger"; onClick?: (e?: any) => void; icon?: React.ReactNode }) { return <button onClick={onClick} className={`app-button ${variant}`}>{children}{icon}</button>; }
+function Button({
+  children,
+  variant = "primary",
+  onClick,
+  icon,
+  type = "button",
+  disabled = false,
+  className = "",
+  style,
+}: {
+  children: React.ReactNode;
+  variant?: "primary" | "secondary" | "quiet" | "danger";
+  onClick?: (e?: any) => void;
+  icon?: React.ReactNode;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <button
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      style={style}
+      className={`app-button ${variant} ${className}`}
+    >
+      {children}
+      {icon}
+    </button>
+  );
+}
 function Kpi({ label, value, detail, tone = "forest", chartData }: { label: string; value: string; detail: string; tone?: string; chartData?: number[] }) { 
   const data = chartData ? chartData.map((val, i) => ({ index: i, value: val })) : [];
   return <div className={`kpi kpi-${tone}`} style={{position: 'relative', overflow: 'hidden'}}><div className="kpi-orbit" /><div style={{position:'relative', zIndex:2}}><p>{label}</p><strong>{value}</strong><small>{detail}</small></div>
@@ -141,7 +172,7 @@ function WorkerCard({
           </span>
         )}
         <Button
-          variant={isBusy ? "outline" : "secondary"}
+          variant={isBusy ? "quiet" : "secondary"}
           onClick={() => onSelect(worker)}
           icon={<ArrowRight size={15} />}
         >
@@ -1616,7 +1647,7 @@ function SocietyAuditModal({
     },
   ];
 
-  const downloadDoc = (doc: typeof auditDocs[0]) => {
+  const downloadDoc = (doc: any) => {
     if (doc.fileUrl) {
       window.open(doc.fileUrl, "_blank");
       toast.success(`Opening original uploaded document: "${doc.fileName}"`);
@@ -2591,7 +2622,7 @@ function AdminSocietyProfileSection({
 
   // Dynamic calculations for welfare & dispatches
   const totalVolumeNumber = bookings.reduce(
-    (acc, b) => acc + (parseInt(String(b.fee || b.amount || 0).replace(/[^\d]/g, "")) || 0),
+    (acc, b) => acc + (parseInt(String(b.amount || 0).replace(/[^\d]/g, "")) || 0),
     0
   );
   const disbursedAid = claims
@@ -3411,7 +3442,7 @@ function AdminOverview({
   
   // Dynamic financial totals
   const totalVolumeNumber = bookingItems.reduce(
-    (acc, b) => acc + (parseInt(String(b.fee || b.amount || 0).replace(/[^\d]/g, "")) || 0),
+    (acc, b) => acc + (parseInt(String(b.amount || 0).replace(/[^\d]/g, "")) || 0),
     0
   );
   const totalVolumeFormatted = totalVolumeNumber > 0 ? `₹${totalVolumeNumber.toLocaleString("en-IN")}` : "₹0";
@@ -3425,7 +3456,7 @@ function AdminOverview({
 
   // Dynamic sparklines
   const volumeData = bookingItems.length > 0
-    ? bookingItems.map((b) => parseInt(String(b.fee || b.amount || 0).replace(/[^\d]/g, "")) || 350)
+    ? bookingItems.map((b) => parseInt(String(b.amount || 0).replace(/[^\d]/g, "")) || 350)
     : undefined;
   const dispatchesData = bookingItems.length > 0
     ? [Math.max(1, activeCount), Math.max(1, completedCount), bookingItems.length]
@@ -3447,7 +3478,7 @@ function AdminOverview({
     const counts: Record<string, { count: number; volume: number }> = {};
     bookingItems.forEach((b) => {
       const cat = b.service || "General Services";
-      const amount = parseInt(String(b.fee || b.amount || 0).replace(/[^\d]/g, "")) || 0;
+      const amount = parseInt(String(b.amount || 0).replace(/[^\d]/g, "")) || 0;
       if (!counts[cat]) counts[cat] = { count: 0, volume: 0 };
       counts[cat].count += 1;
       counts[cat].volume += amount;
@@ -4264,7 +4295,7 @@ function VerifyWorkers({ go, onReview }: { go: (screen: Screen) => void; onRevie
 }
 
 function AdminWorkerReview({ worker, close }: { worker: typeof pendingWorkers[number] | DemoWorkerRegistration; close: () => void }) { 
-  const { approvedWorkerNames, rejectedWorkerNames, approveWorker, rejectWorker, claims, addClaim, adminSocietyName } = useDemoStore(); 
+  const { approvedWorkerNames, rejectedWorkerNames, approveWorker, rejectWorker, claims, addClaim, adminSocietyName, societies } = useDemoStore(); 
   const [claimType, setClaimType] = useState<"Accident" | "Health" | "Maternity" | "Other">("Health");
   const [claimAmount, setClaimAmount] = useState("");
   const [showClaimForm, setShowClaimForm] = useState(false);
@@ -5309,8 +5340,8 @@ function ProfileScreen({ role, go }: { role: Role; go: (screen: Screen) => void 
     return <AdminSocietyProfileSection go={go} />;
   }
 
-  const { profile, updateProfile } = useAuth();
-  const { claims, addClaim, bookings: storeBookings, workerEarningsPrivacy, toggleWorkerEarningsPrivacy } = useDemoStore();
+  const { session, profile, updateProfile } = useAuth();
+  const { claims, addClaim, bookings: storeBookings, workerEarningsPrivacy, toggleWorkerEarningsPrivacy, societies } = useDemoStore();
   
   // Tabs
   const [customerTab, setCustomerTab] = useState<"personal" | "address" | "preferences">("personal");
@@ -5487,7 +5518,7 @@ function ProfileScreen({ role, go }: { role: Role; go: (screen: Screen) => void 
                 </span>
               </div>
               <p style={{ margin: 0, fontSize: 12, color: "var(--muted-foreground)" }}>
-                {[custPhone, profile?.email, custArea].filter(Boolean).join(" · ") || "Cooperative Community Member"}
+                {[custPhone, session?.user?.email, custArea].filter(Boolean).join(" · ") || "Cooperative Community Member"}
               </p>
             </div>
           </div>
@@ -5550,7 +5581,7 @@ function ProfileScreen({ role, go }: { role: Role; go: (screen: Screen) => void 
               </div>
               <div>
                 <label>Registered Email</label>
-                <input value={profile?.email || "customer@coop.org"} disabled style={{ opacity: 0.7 }} />
+                <input value={session?.user?.email || "customer@coop.org"} disabled style={{ opacity: 0.7 }} />
               </div>
               <div>
                 <label>Emergency Contact Phone (for service visits)</label>
@@ -5640,7 +5671,7 @@ function ProfileScreen({ role, go }: { role: Role; go: (screen: Screen) => void 
         {/* Left Hero Card for Workers & Society Admins */}
         <aside className="panel profile-hero">
           <Avatar initials={initials} tone="brass" />
-          <Status value={role === "Admin" ? "Society Admin" : "Verified Member"} />
+          <Status value={(role as string) === "Admin" ? "Society Admin" : "Verified Member"} />
           <h2>{workName}</h2>
           <p>{workService} · {workArea}</p>
 
@@ -5739,7 +5770,7 @@ function ProfileScreen({ role, go }: { role: Role; go: (screen: Screen) => void 
                   </div>
                   <div className="profile-full-width">
                     <label>e-Shram National Database UAN Status</label>
-                    <input value={profile?.eShramUan ? `UAN: ${profile.eShramUan} · Verified` : "e-Shram UAN Verification via Cooperative Society"} disabled style={{ opacity: 0.7, background: "var(--sage-soft)", color: "var(--forest-dark)" }} />
+                    <input value={(profile as any)?.eShramUan ? `UAN: ${(profile as any).eShramUan} · Verified` : "e-Shram UAN Verification via Cooperative Society"} disabled style={{ opacity: 0.7, background: "var(--sage-soft)", color: "var(--forest-dark)" }} />
                   </div>
                 </div>
               )}
@@ -6589,7 +6620,7 @@ function BookingDetailModal({
   go?: (screen: Screen) => void;
 }) {
   const { profile } = useAuth();
-  const { updateBooking } = useDemoStore();
+  const { updateBooking, societies } = useDemoStore();
   const [paymentInfo, setPaymentInfo] = useState<{ paid: boolean; method: string; txRef: string } | null>(() => {
     if (booking.paymentStatus === "Paid" && booking.paymentMethod) {
       return { paid: true, method: booking.paymentMethod, txRef: booking.paymentTxRef || `TXN_${booking.id.replace(/\D/g, '') || '7891'}` };
@@ -7071,7 +7102,7 @@ function BookingDetailModal({
                 <div>
                   <small style={{ display: "block", color: "var(--muted-foreground)", fontSize: 9 }}>CUSTOMER / HOUSEHOLD</small>
                   <strong>{booking.customerName || profile?.fullName || "Valued Customer"}</strong>
-                  <div style={{ fontSize: 10, color: "var(--ink-soft)" }}>{booking.address || profile?.addressLine || "Designated Locality"}</div>
+                  <div style={{ fontSize: 10, color: "var(--ink-soft)" }}>{(booking as any).address || profile?.addressLine || "Designated Locality"}</div>
                 </div>
                 <div>
                   <small style={{ display: "block", color: "var(--muted-foreground)", fontSize: 9 }}>VERIFIED WORKER / MEMBER</small>
