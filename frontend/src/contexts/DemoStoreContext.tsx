@@ -402,18 +402,20 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
     if (!supabase) return;
     const { data } = await supabase
       .from("worker_profiles")
-      .select("user_id, service_category, experience_years, area, avg_rating, jobs_completed, rate_per_visit, users(full_name)")
+      .select("user_id, service_category, experience_years, area, avg_rating, jobs_completed, rate_per_visit, users(full_name, area)")
       .eq("verification_status", "Verified");
     if (!data || cancelledRef.current) return;
 
     setVerifiedWorkers(data.map((p, i) => {
-      const name = (p.users as unknown as { full_name: string } | null)?.full_name ?? "Unknown Worker";
+      const u = p.users as unknown as { full_name?: string; area?: string } | null;
+      const name = u?.full_name ?? "Unknown Worker";
+      const resolvedArea = p.area || u?.area || "Unspecified Locality";
       return {
         id: p.user_id,
         name,
         initials: toInitials(name),
         service: p.service_category,
-        area: p.area ?? "Gurugram",
+        area: resolvedArea,
         years: p.experience_years ?? 1,
         rating: p.avg_rating ? Number(p.avg_rating).toFixed(1) : "New worker",
         jobs: p.jobs_completed ?? 0,
@@ -428,19 +430,21 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
     if (!supabase) return;
     const { data } = await supabase
       .from("worker_profiles")
-      .select("user_id, service_category, experience_years, area, membership_id, created_at, verification_status, users(full_name, phone), societies(name)")
+      .select("user_id, service_category, experience_years, area, membership_id, created_at, verification_status, users(full_name, phone, area), societies(name)")
       .eq("verification_status", "Pending");
     if (!data || cancelledRef.current) return;
 
     setNewPendingWorkers(data.map((p, i) => {
-      const name = (p.users as unknown as { full_name: string } | null)?.full_name ?? "New Worker";
+      const u = p.users as unknown as { full_name?: string; phone?: string; area?: string } | null;
+      const name = u?.full_name ?? "New Worker";
       const society = (p.societies as unknown as { name: string } | null)?.name ?? "Unknown Society";
+      const resolvedArea = p.area || u?.area || "Unspecified Locality";
       return {
         id: p.user_id,
         name,
         initials: toInitials(name),
         service: p.service_category,
-        area: p.area ?? "Gurugram",
+        area: resolvedArea,
         years: p.experience_years ?? 1,
         rating: "New worker",
         jobs: 0,
