@@ -216,7 +216,7 @@ function vitePluginRazorpay(): Plugin {
           });
           req.on("end", async () => {
             try {
-              const { handleCreateOrder } = await import("./server/razorpay.ts");
+              const { handleCreateOrder } = await import("./backend/razorpay.ts");
               const parsed = body ? JSON.parse(body) : {};
               const result = await handleCreateOrder(parsed);
               res.writeHead(result.status, { "Content-Type": "application/json" });
@@ -236,7 +236,7 @@ function vitePluginRazorpay(): Plugin {
           });
           req.on("end", async () => {
             try {
-              const { handleVerifyPayment } = await import("./server/razorpay.ts");
+              const { handleVerifyPayment } = await import("./backend/razorpay.ts");
               const parsed = body ? JSON.parse(body) : {};
               const result = handleVerifyPayment(parsed);
               res.writeHead(result.status, { "Content-Type": "application/json" });
@@ -269,13 +269,13 @@ export default defineConfig({
   plugins,
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@": path.resolve(import.meta.dirname, "frontend", "src"),
       "@shared": path.resolve(import.meta.dirname, "shared"),
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
   },
   envDir: path.resolve(import.meta.dirname),
-  root: path.resolve(import.meta.dirname, "client"),
+  root: path.resolve(import.meta.dirname, "frontend"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,

@@ -109,7 +109,7 @@ temp/
 .webdev/
 
 # Manus runtime & debug files
-client/public/__manus__/
+frontend/public/__manus__/
 .project-config.json
 
 # Local agent directories & logs

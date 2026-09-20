@@ -19,7 +19,7 @@ Co-Labour operates under the statutory framework of the State Cooperative Societ
 
 ```text
 colabour/
-├── client/                     # React 19 + Vite Frontend
+├── frontend/                   # React 19 + Vite Frontend
 │   ├── public/                 # Static brand assets & logos
 │   └── src/
 │       ├── components/         # Reusable UI components & Radix primitives
@@ -41,9 +41,9 @@ colabour/
 │       ├── App.tsx             # Root router & application wrapper
 │       ├── index.css           # Executive Cooperative Light design system tokens
 │       └── main.tsx            # Application entry point
-├── server/                     # Express.js Backend API
+├── backend/                    # Express.js Backend API
 │   ├── index.ts                # API server & static middleware
-│   └── routes.ts               # Server endpoints & health checks
+│   └── razorpay.ts             # Payment endpoints & verification
 ├── shared/                     # Shared TypeScript schemas & database interfaces
 │   └── schema.ts               # Entity definitions
 ├── supabase/                   # Database migrations & RLS policies
