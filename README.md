@@ -220,13 +220,19 @@ flowchart LR
    - **Build Validation:** Runs `npm run build` to ensure all frontend assets and backend modules compile cleanly.
 
 2. **Continuous Deployment (Two Supported Methods):**
-   - **Method 1: Native Vercel Integration (Zero Config):**
-     When your GitHub repository is connected to Vercel via the Vercel Dashboard, Vercel automatically detects the push and deploys the update immediately to your live production domain.
-   - **Method 2: GitHub Actions Automated Deploy:**
-     If you want GitHub Actions to deploy directly to Vercel, navigate to **GitHub Repository Settings** > **Secrets and variables** > **Actions**, and add:
-     - `VERCEL_TOKEN`: Your Vercel personal access token (from [Vercel Account Settings > Tokens](https://vercel.com/account/tokens)).
-     - `VERCEL_ORG_ID`: Found in your Vercel team/account settings.
-     - `VERCEL_PROJECT_ID`: Found in your Vercel project settings.
+   - **Method A: Vercel Deploy Hook (Recommended — starts deployment strictly after CI succeeds):**
+     1. In your Vercel Project, go to **Settings** > **Git** > **Deploy Hooks**.
+     2. Create a hook named `GitHub Actions` targeting the `main` branch.
+     3. Copy the generated URL.
+     4. In GitHub, go to **Settings** > **Secrets and variables** > **Actions** > **New repository secret**.
+     5. Name: `VERCEL_DEPLOY_HOOK`, Value: `<pasted hook URL>`.
+     *(Once added, GitHub Actions will compile and test your code first, and trigger the Vercel deployment only when all checks pass).*
+
+   - **Method B: Vercel CLI Token:**
+     Add `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` to GitHub Secrets.
+
+   - **Method C: Direct Vercel Git App (Zero Config):**
+     If you simply connect the repo to Vercel, Vercel listens for GitHub push events and deploys on every push.
 
 ---
 
