@@ -1,0 +1,526 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Style reminder: Executive Cooperative Light — ivory surfaces, forest/teal trust color, muted brass/sage/blue states, precise operational shell, editorial whitespace. No dark mode, neon, or red-pink primary. */
+:root { --background:#f5f1ea; --foreground:#1e2823; --card:#fffdf8; --card-foreground:#1e2823; --primary:#176b62; --primary-foreground:#fffdf8; --muted:#e7e5dc; --muted-foreground:#717a72; --border:rgba(30,40,35,.12); --ivory:#f5f1ea; --paper:#fffdf8; --ink:#1e2823; --forest:#176b62; --forest-dark:#10524b; --teal-soft:#dfeee9; --sage:#9db8a1; --sage-soft:#edf4ed; --brass:#c89439; --brass-soft:#fbf1dc; --blue:#88adbf; --blue-soft:#e8f1f4; --ink-soft:#667068; --danger:#a85c4d; --danger-soft:#f7e8e3; --ease:cubic-bezier(.23,1,.32,1); --shadow:0 10px 26px rgba(44,54,43,.055); }
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--ivory);color:var(--ink);font-family:"Manrope", sans-serif,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;cursor:default} button,input,select,textarea{font:inherit} button{cursor:pointer} a{text-decoration:none;color:inherit} input,textarea,[contenteditable]{cursor:text} div,section,article,aside,main,header,nav,p,h1,h2,h3,h4,h5,h6,span,label,li,ul,ol{cursor:default}
+.product-shell{min-height:100vh;display:flex;background:radial-gradient(circle at 82% 0%,rgba(23,107,98,.055),transparent 33rem),var(--ivory)}
+.app-rail{width:244px;position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;padding:26px 17px 19px;background:rgba(245,241,234,.92);backdrop-filter:blur(16px);border-right:1px solid var(--border);z-index:5}.brand-lockup{display:flex;align-items:center;gap:11px;padding:0 7px}.brand-lockup strong{display:block;font:600 18px "Manrope", sans-serif;letter-spacing:-.045em}.brand-lockup span{display:block;color:var(--muted-foreground);font-size:9px;letter-spacing:.14em;margin-top:3px}.brand-mark{width:32px;height:32px;border-radius:10px;position:relative;background:var(--forest);box-shadow:0 7px 17px rgba(23,107,98,.19);flex:0 0 auto}.brand-mark span{position:absolute;width:15px;height:9px;border:2px solid #fffdf8;border-radius:999px;transform:rotate(33deg);top:8px;left:5px}.brand-mark span:nth-child(2){transform:rotate(-33deg);left:11px;top:13px}.brand-mark b{position:absolute;width:5px;height:5px;border-radius:50%;background:#fffdf8;top:13px;left:13px}.rail-context{margin:31px 5px 0;padding:9px 10px;display:flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:9px;background:rgba(255,253,248,.55);font-size:10px;color:var(--ink-soft)}.rail-context svg{margin-left:auto}.live-indicator,.co-op-status>i,.availability i{width:7px;height:7px;border-radius:50%;display:inline-block;background:#5e967c;box-shadow:0 0 0 4px rgba(94,150,124,.12)}.rail-label,.eyebrow{color:var(--muted-foreground);font-size:10px;letter-spacing:.14em;font-weight:600}.rail-label{margin:38px 12px 13px}.app-nav{display:grid;gap:4px}.app-nav button,.rail-settings{border:0;background:transparent;color:#737c74;display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;border-radius:10px;text-align:left;font-size:13px;transition:.18s var(--ease)}.app-nav button b{margin-left:auto;font:600 10px "Manrope", sans-serif;color:var(--forest)}.app-nav button:hover,.app-nav button.active,.rail-settings:hover,.rail-settings.active{color:var(--ink);background:var(--paper);box-shadow:0 5px 16px rgba(46,56,45,.065)}.app-nav button.active svg,.rail-settings.active svg{color:var(--forest)}.rail-divider{height:1px;background:var(--border);margin:23px 12px 12px}.rail-settings{margin-bottom:12px}.rail-footer{margin-top:auto}.co-op-status{display:flex;align-items:center;gap:9px;padding:14px 10px;border-top:1px solid var(--border)}.co-op-status strong,.co-op-status small,.profile-mini strong,.profile-mini small{display:block}.co-op-status strong{font-size:11px}.co-op-status small,.profile-mini small{font-size:10px;color:var(--muted-foreground);margin-top:3px}.profile-mini{display:flex;align-items:center;gap:9px;padding:13px 10px 2px}.profile-mini>svg{margin-left:auto;color:#899089}.profile-mini strong{font-size:11px}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--paper);font:600 11px "Manrope", sans-serif;flex:0 0 auto}.avatar-forest{background:var(--forest)}.avatar-blue{background:#6d96a9}.avatar-brass{background:#a97d36}.avatar-sage{background:#7d9c85}
+.app-main{margin-left:244px;width:calc(100% - 244px);min-width:0}.app-topbar{height:70px;padding:0 clamp(16px,3vw,36px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}.topbar-brand{display:flex;align-items:center;gap:8px;flex:1}.topbar-center{display:flex;align-items:center;justify-content:center;flex:1}.topbar-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:1}.command-button,.icon-button{border:1px solid var(--border);background:rgba(255,253,248,.58);border-radius:999px;color:var(--ink-soft);display:flex;align-items:center;gap:7px;font-size:11px}.command-button{padding:8px 14px;background:var(--ivory);transition:background .18s,border-color .18s}.command-button:hover{background:var(--paper);border-color:rgba(23,107,98,.3)}.command-button kbd{font-size:9px;background:var(--muted);border-radius:4px;padding:2px 5px}.icon-button{justify-content:center;width:34px;height:34px;position:relative;border-radius:9px}.icon-button>i{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--forest);right:7px;top:6px}.mobile-menu{display:none;border:0;background:transparent}
+.content-wrap{padding:56px 4.2vw 90px;max-width:1500px}.page-title{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:35px}.eyebrow{display:flex;align-items:center;gap:8px}.eyebrow span{width:20px;height:1px;background:var(--forest);display:inline-block}.page-title h1{font:600 clamp(38px,4.7vw,66px)/.98 "Manrope", sans-serif;letter-spacing:-.075em;margin:18px 0 14px}.page-description{max-width:470px;color:var(--muted-foreground);font-size:15px;line-height:1.6;margin:0}.app-button{border:0;border-radius:999px;padding:12px 16px;display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:600;white-space:nowrap;transition:.18s var(--ease)}.app-button.primary{background:var(--forest);color:var(--paper);box-shadow:0 9px 19px rgba(23,107,98,.18)}.app-button.primary:hover{background:var(--forest-dark);transform:translateY(-1px)}.app-button.secondary{background:var(--paper);color:var(--ink);border:1px solid var(--border)}.app-button.secondary:hover{transform:translateY(-1px);box-shadow:var(--shadow)}.app-button.quiet{background:transparent;color:var(--ink-soft);padding-left:0}.app-button.danger{background:var(--danger-soft);color:var(--danger)}.app-button:active{transform:scale(.97)}
+.welcome-strip{display:flex;align-items:center;gap:13px;background:var(--teal-soft);border:1px solid rgba(23,107,98,.12);border-radius:14px;padding:15px 17px;margin-bottom:17px}.welcome-orbit{width:35px;height:35px;border-radius:11px;background:var(--forest);color:var(--paper);display:grid;place-items:center}.welcome-strip strong{font:600 13px "Manrope", sans-serif}.welcome-strip p{margin:3px 0 0;color:#5d736b;font-size:11px}.welcome-strip>.status{margin-left:auto}.status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 9px;font-size:10px;white-space:nowrap}.status i{width:6px;height:6px;border-radius:50%;background:currentColor}.status-good{background:var(--sage-soft);color:#5c896b}.status-pending{background:var(--brass-soft);color:#a4762c}.status-info{background:var(--blue-soft);color:#5d869d}.status-urgent{background:var(--danger-soft);color:var(--danger)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px}.kpi{position:relative;overflow:hidden;background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:18px;min-height:125px;box-shadow:0 7px 20px rgba(48,55,45,.038)}.kpi-orbit{position:absolute;right:-22px;bottom:-25px;width:86px;height:86px;border-radius:50%;background:var(--kpi-tone);opacity:.22}.kpi-forest{--kpi-tone:#73aa9b}.kpi-brass{--kpi-tone:#dbb25e}.kpi-blue{--kpi-tone:#9fc1d0}.kpi-sage{--kpi-tone:#9db8a1}.kpi p{margin:0 0 15px;color:var(--muted-foreground);font-size:10px;text-transform:uppercase;letter-spacing:.1em}.kpi strong{display:block;font:600 28px "Manrope", sans-serif;letter-spacing:-.055em}.kpi small{display:block;margin-top:6px;color:#7b847c;font-size:11px}
+.dashboard-grid,.admin-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:14px}.admin-grid{grid-template-columns:1.1fr .9fr}.panel{background:var(--paper);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}.panel-head,.table-header{display:flex;align-items:flex-start;justify-content:space-between;padding:21px 22px;border-bottom:1px solid var(--border)}.panel-head h2,.table-header h2{font:600 16px "Manrope", sans-serif;letter-spacing:-.035em;margin:0}.panel-head small,.table-header small{display:block;color:var(--muted-foreground);font-size:10px;margin-top:5px}.link-button{border:0;background:transparent;color:var(--forest);display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:2px}.booking-feature{padding:23px}.booking-worker{display:flex;align-items:center;gap:10px}.booking-worker>div:nth-child(2){flex:1}.booking-worker strong,.booking-worker small{display:block}.booking-worker strong{font:600 14px "Manrope", sans-serif}.booking-worker small{font-size:11px;color:var(--muted-foreground);margin-top:3px}.booking-meta{display:flex;gap:19px;padding:24px 0 22px;color:var(--muted-foreground);font-size:11px}.booking-meta span{display:inline-flex;align-items:center;gap:6px}.progress-rail{height:5px;background:#e8e9e3;border-radius:999px;display:flex;gap:5px}.progress-rail span{flex:1;background:#e8e9e3;border-radius:999px}.progress-rail span.done{background:var(--forest)}.progress-rail span.current{background:#a6c3bd}.progress-labels{display:flex;justify-content:space-between;color:#8a928a;font-size:9px;margin-top:8px}.quick-actions{padding:10px 18px 17px}.quick-actions button{width:100%;border:0;border-bottom:1px solid var(--border);background:transparent;display:flex;align-items:center;gap:10px;padding:15px 3px;text-align:left;color:var(--ink);font-size:12px}.quick-actions button:last-child{border-bottom:0}.quick-actions button svg:first-child{color:var(--forest)}.quick-actions button span{flex:1}.quick-actions button svg:last-child{color:#9aa09a}
+.search-panel{display:flex;gap:9px;align-items:center;background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:9px;margin-bottom:21px;box-shadow:var(--shadow)}.search-field{display:flex;align-items:center;gap:9px;flex:1;padding:0 11px;color:var(--forest)}.search-field input{border:0;outline:0;background:transparent;width:100%;font-size:13px;color:var(--ink)}.search-panel select,.issue-form select{border:1px solid var(--border);background:var(--ivory);color:var(--ink);border-radius:9px;padding:10px;font-size:11px;outline:0}.filter-button{border:1px solid var(--border);background:var(--paper);border-radius:9px;padding:10px 12px;display:inline-flex;gap:7px;align-items:center;color:var(--ink-soft);font-size:11px}.results-heading{display:flex;justify-content:space-between;align-items:center;margin:0 2px 13px;font-size:12px}.results-heading span{color:var(--muted-foreground)}.sort-label{display:flex;align-items:center;gap:4px;font-size:10px}.sort-label b{color:var(--ink)}.worker-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.worker-card{background:var(--paper);border:1px solid var(--border);border-radius:15px;padding:18px;box-shadow:var(--shadow);transition:.22s var(--ease)}.worker-card:hover{transform:translateY(-3px);box-shadow:0 17px 31px rgba(44,54,43,.1)}.worker-card-top{display:flex;justify-content:space-between;align-items:start}.worker-identity{display:flex;align-items:center;gap:10px}.worker-identity h3{font:600 15px "Manrope", sans-serif;margin:0}.worker-identity p{margin:4px 0 0;color:var(--muted-foreground);font-size:11px}.worker-details{display:flex;flex-wrap:wrap;gap:8px 13px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0;margin:17px 0;color:var(--muted-foreground);font-size:10px}.worker-details span{display:inline-flex;align-items:center;gap:5px}.worker-details span:nth-child(3){color:#ad7c2c}.worker-details em{font-style:normal;color:#9aa099}.worker-card-footer{display:flex;align-items:center;gap:10px}.worker-card-footer>div strong,.worker-card-footer>div small{display:block}.worker-card-footer>div strong{font:600 15px "Manrope", sans-serif}.worker-card-footer>div small{font-size:9px;color:var(--muted-foreground);margin-top:2px}.availability{margin-left:auto;color:#66806f;font-size:9px;display:inline-flex;align-items:center;gap:5px}.worker-card-footer .app-button{padding:8px 10px;font-size:10px}.network-note{display:flex;align-items:flex-start;gap:10px;background:var(--sage-soft);border-radius:11px;margin-top:15px;padding:14px;color:#64806c}.network-note svg{flex:0 0 auto}.network-note p{margin:0;font-size:11px;line-height:1.5}.network-note strong{color:var(--ink)}
+.booking-tabs{display:flex;gap:22px;align-items:center;border-bottom:1px solid var(--border);margin-bottom:13px}.booking-tabs button{border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted-foreground);padding:0 0 12px;font-size:12px}.booking-tabs button.active{color:var(--ink);border-bottom-color:var(--forest)}.booking-tabs button b{background:var(--teal-soft);color:var(--forest);border-radius:999px;padding:3px 6px;margin-left:5px;font-size:9px}.booking-tabs .tab-filter{margin-left:auto;display:flex;align-items:center;gap:6px}.table-panel{overflow:hidden}.booking-list{padding:0 5px}.booking-row{border:0;border-bottom:1px solid var(--border);background:transparent;width:100%;padding:16px;display:grid;grid-template-columns:.72fr 1.25fr .65fr .75fr auto;align-items:center;gap:13px;text-align:left;color:var(--ink)}.booking-row:last-child{border-bottom:0}.booking-row:hover{background:#fbfaf6}.booking-id span,.booking-id small,.booking-person strong,.booking-person small,.booking-price strong,.booking-price small{display:block}.booking-id span{font:600 11px "Manrope", sans-serif}.booking-id small,.booking-person small,.booking-price small{font-size:10px;color:var(--muted-foreground);margin-top:4px}.booking-person{display:flex;align-items:center;gap:9px}.booking-person .avatar{width:29px;height:29px;font-size:9px}.booking-person strong{font-size:11px}.booking-price strong{font:600 13px "Manrope", sans-serif}.emergency-label{display:inline-flex;align-items:center;gap:4px;background:var(--danger-soft);color:var(--danger);border-radius:999px;padding:4px 7px;font-size:9px;margin-top:5px}.row-chevron{color:#9ca39c}.worker-dash-grid{grid-template-columns:1.3fr .9fr}.request-row,.admin-row,.activity-line,.issue-row,.settings-row,.verification-row,.verified-row{display:flex;align-items:center;gap:11px;padding:15px 21px;border-bottom:1px solid var(--border)}.request-row:last-child,.admin-row:last-child,.activity-line:last-child,.issue-row:last-child,.settings-row:last-child,.verification-row:last-child{border-bottom:0}.request-main,.verification-person{flex:1}.request-main strong,.request-main small,.admin-row strong,.admin-row small,.activity-line strong,.activity-line small,.verification-person strong,.verification-person small{display:block}.request-main strong,.admin-row strong,.verification-person strong{font-size:12px}.request-main small,.admin-row small,.activity-line small,.verification-person small{font-size:10px;color:var(--muted-foreground);margin-top:4px}.request-side{display:flex;align-items:center;gap:8px}.request-side .app-button{padding:8px 11px;font-size:10px}.welfare-panel{padding-bottom:20px}.welfare-status{display:flex;align-items:center;gap:10px;margin:19px 21px 0;padding:14px;background:var(--sage-soft);border-radius:11px;color:#5e8068}.welfare-icon{width:35px;height:35px;border-radius:10px;background:var(--paper);display:grid;place-items:center}.welfare-status div:nth-child(2){flex:1}.welfare-status strong,.welfare-status small{display:block}.welfare-status strong{font:600 13px "Manrope", sans-serif;color:var(--ink)}.welfare-status small{font-size:10px;margin-top:4px}.welfare-panel>p{margin:14px 21px;color:var(--muted-foreground);font-size:11px;line-height:1.5}.welfare-panel>.link-button{margin-left:21px}.activity-time{color:#9ba19b;font:10px "Manrope", sans-serif;width:34px}.activity-line div{flex:1}.verification-callout{display:flex;align-items:center;gap:11px;background:var(--teal-soft);border:1px solid rgba(23,107,98,.12);border-radius:13px;padding:14px 17px;margin-bottom:15px;color:var(--forest)}.verification-callout svg{flex:0 0 auto}.verification-callout div{flex:1}.verification-callout strong{display:block;font:600 12px "Manrope", sans-serif;color:var(--ink)}.verification-callout p{margin:4px 0 0;color:#668078;font-size:10px}.verification-callout>span{font:600 11px "Manrope", sans-serif}.table-tools{display:flex;align-items:center;gap:8px}.verification-row{min-height:74px}.verification-row .avatar{width:32px;height:32px}.submitted{color:var(--muted-foreground);font-size:10px;margin-left:auto}.reject-button{border:0;background:transparent;color:var(--danger);font-size:10px}.verified-row{color:#5f8d6c;background:var(--sage-soft);font-size:12px}.verified-row strong{flex:1}.admin-row .status{margin-left:auto}.row-action{border:0;background:transparent;color:var(--muted-foreground);padding:4px}.issues-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:14px}.issue-form{padding-bottom:21px}.issue-form label{display:block;margin:16px 21px 0;font-size:11px;color:var(--muted-foreground)}.issue-form input,.issue-form textarea,.issue-form select{display:block;width:100%;border:1px solid var(--border);background:var(--ivory);border-radius:9px;outline:0;padding:10px;margin-top:7px;color:var(--ink);font-size:12px;resize:vertical}.issue-form>.app-button{margin:18px 21px 0}.success-note{margin:14px 21px 0;background:var(--sage-soft);color:#5f886a;padding:10px;border-radius:8px;font-size:10px;display:flex;align-items:center;gap:6px}.issue-row .issue-priority{width:6px;height:32px;border-radius:99px;background:var(--sage)}.issue-row .priority-high{background:var(--danger)}.issue-row>div:nth-child(2){flex:1}.issue-row strong,.issue-row small{display:block}.issue-row strong{font-size:11px}.issue-row small{font-size:10px;color:var(--muted-foreground);margin-top:4px}.empty-state{padding:43px 20px;text-align:center;color:var(--muted-foreground)}.empty-state svg{color:var(--forest);margin-bottom:9px}.empty-state strong,.empty-state p{display:block}.empty-state strong{color:var(--ink);font:600 13px "Manrope", sans-serif}.empty-state p{font-size:11px;line-height:1.5}.settings-panel{max-width:760px}.settings-row{justify-content:space-between}.settings-row strong,.settings-row small{display:block}.settings-row strong{font:600 13px "Manrope", sans-serif}.settings-row small{font-size:11px;color:var(--muted-foreground);margin-top:4px}.toggle input{display:none}.toggle span{display:block;width:36px;height:20px;background:var(--forest);border-radius:999px;position:relative}.toggle span:after{content:"";position:absolute;width:16px;height:16px;top:2px;right:2px;background:#fff;border-radius:50%}
+.modal-backdrop{position:fixed;inset:0;background:rgba(25,35,30,.38);backdrop-filter:blur(5px);z-index:999;display:flex;justify-content:center;align-items:center;padding:24px 14px 44px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;animation:fade .18s ease-out;box-sizing:border-box}.modal-backdrop:has(.detail-drawer){justify-content:flex-end;align-items:stretch;padding:0;overflow-y:hidden}.detail-drawer{width:min(460px,100%);height:100%;margin-left:auto;background:var(--paper);padding:31px;box-shadow:-20px 0 55px rgba(25,35,30,.12);position:relative;animation:slide .25s var(--ease);display:flex;flex-direction:column;overflow-y:auto}.close-button{position:absolute;right:23px;top:21px;width:31px;height:31px;border:1px solid var(--border);border-radius:8px;background:var(--ivory);display:grid;place-items:center;color:var(--ink-soft);z-index:2;cursor:pointer}.drawer-hero{padding:40px 0 24px;text-align:center;border-bottom:1px solid var(--border)}.drawer-hero .avatar{width:66px;height:66px;margin:0 auto 13px;font-size:18px}.drawer-hero .status{margin-bottom:11px}.drawer-hero h2{font:600 27px "Manrope", sans-serif;letter-spacing:-.05em;margin:0}.drawer-hero p{color:var(--muted-foreground);font-size:12px;margin:6px 0 0}.trust-block{display:flex;align-items:flex-start;gap:10px;background:var(--sage-soft);border-radius:11px;padding:13px;margin-top:19px;color:#5f896b}.trust-block svg{flex:0 0 auto}.trust-block strong,.trust-block small{display:block}.trust-block strong{font-size:11px;color:var(--ink)}.trust-block small{font-size:10px;margin-top:3px}.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);padding:22px 0;border-bottom:1px solid var(--border);text-align:center}.profile-stats strong,.profile-stats small{display:block}.profile-stats strong{font:600 20px "Manrope", sans-serif}.profile-stats small{color:var(--muted-foreground);font-size:9px;margin-top:4px}.drawer-section{padding:25px 0}.drawer-section .eyebrow{margin-bottom:11px}.drawer-section>p:last-child{font-size:14px;line-height:1.6;color:var(--ink-soft);margin:0}.drawer-bottom{margin-top:auto;border-top:1px solid var(--border);padding-top:18px;display:flex;align-items:center;justify-content:space-between}.drawer-bottom strong,.drawer-bottom small{display:block}.drawer-bottom strong{font:600 18px "Manrope", sans-serif}.drawer-bottom small{font-size:10px;color:var(--muted-foreground);margin-top:3px}.booking-modal{width:min(550px,calc(100% - 16px));max-height:min(90vh,880px);background:var(--paper);border-radius:18px;padding:28px 28px 44px;box-shadow:0 25px 70px rgba(25,35,30,.22),0 0 0 1px rgba(25,35,30,.06);position:relative;margin:auto;animation:rise .22s var(--ease);display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;box-sizing:border-box}.booking-modal h2{font:600 28px "Manrope", sans-serif;letter-spacing:-.06em;margin:15px 0 12px}.modal-detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:17px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 0;margin:22px 0}.modal-detail-grid small,.modal-detail-grid strong{display:block}.modal-detail-grid small{font-size:10px;color:var(--muted-foreground);margin-bottom:5px}.modal-detail-grid strong{font-size:12px}.modal-progress{margin-bottom:24px}.modal-progress .progress-labels{font-size:8px}.booking-modal::-webkit-scrollbar,.detail-drawer::-webkit-scrollbar,.modal-backdrop::-webkit-scrollbar{width:6px;height:6px}.booking-modal::-webkit-scrollbar-track,.detail-drawer::-webkit-scrollbar-track,.modal-backdrop::-webkit-scrollbar-track{background:transparent}.booking-modal::-webkit-scrollbar-thumb,.detail-drawer::-webkit-scrollbar-thumb,.modal-backdrop::-webkit-scrollbar-thumb{background:rgba(25,35,30,.18);border-radius:999px}.booking-modal::-webkit-scrollbar-thumb:hover,.detail-drawer::-webkit-scrollbar-thumb:hover,.modal-backdrop::-webkit-scrollbar-thumb:hover{background:rgba(25,35,30,.32)}
+@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes slide{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:no-preference){.page-title,.kpi,.panel,.worker-card{animation:rise .42s var(--ease) both}.kpi:nth-child(2){animation-delay:.04s}.kpi:nth-child(3){animation-delay:.08s}.kpi:nth-child(4){animation-delay:.12s}}
+@media (max-width:1050px){.app-rail{width:210px}.app-main{margin-left:210px;width:calc(100% - 210px)}.worker-grid{grid-template-columns:1fr}.dashboard-grid,.admin-grid,.issues-layout{grid-template-columns:1fr}.booking-row{grid-template-columns:.75fr 1.2fr .6fr .8fr auto}}
+@media (max-width:720px){.product-shell{display:block}.app-rail{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--border);padding:15px 18px}.rail-context,.rail-label,.app-nav,.rail-divider,.rail-settings,.rail-footer{display:none}.app-main{margin-left:0;width:100%}.app-topbar{margin:0 18px;height:63px}.mobile-menu{display:block}.context-line{font-size:10px}.topbar-actions{gap:5px}.command-button,.role-switch span{display:none}.role-switch{padding:4px 7px}.content-wrap{padding:42px 18px 65px}.page-title{display:block;margin-bottom:28px}.page-title>.app-button{margin-top:18px}.page-title h1{font-size:43px}.page-description{font-size:14px}.kpi-grid{grid-template-columns:repeat(2,1fr)}.kpi{min-height:115px;padding:15px}.kpi strong{font-size:24px}.welcome-strip{align-items:flex-start;flex-wrap:wrap}.welcome-strip>.status{margin-left:48px;margin-top:-5px}.dashboard-grid,.admin-grid,.issues-layout{grid-template-columns:1fr}.search-panel{display:block;padding:8px}.search-field{padding:7px 5px 12px}.search-panel select,.search-panel .filter-button{width:100%;margin-top:6px}.results-heading{align-items:flex-start;gap:10px;flex-direction:column}.worker-grid{grid-template-columns:1fr}.worker-card-footer{flex-wrap:wrap}.availability{margin-left:0;order:2}.worker-card-footer .app-button{margin-left:auto}.booking-tabs{gap:14px}.booking-row{grid-template-columns:1fr auto;gap:9px;padding:15px 10px}.booking-row .booking-price{display:none}.booking-row .booking-id{grid-row:span 2}.booking-row .row-chevron{grid-column:2;grid-row:1/3}.booking-row>div:nth-child(4){grid-column:2}.booking-row .status{font-size:9px}.verification-row{flex-wrap:wrap;padding:14px}.verification-row .submitted{margin-left:43px;width:calc(100% - 43px)}.verification-row .app-button{margin-left:43px}.verification-row .reject-button{margin-left:auto}.app-topbar .icon-button{display:none}.detail-drawer{padding:24px}.booking-modal{padding:24px}.modal-detail-grid{gap:13px}.panel-head,.table-header{padding:18px}.request-row,.admin-row,.activity-line,.issue-row,.settings-row{padding:14px 18px}}
+
+/* Booking / trust flow additions: keep the executive forest-teal hierarchy and make every next action explicit. */
+.modal-intro{color:var(--muted-foreground);font-size:12px;line-height:1.55;margin:0 0 16px}.booking-form-worker{padding:12px 0 17px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:17px}.booking-form-worker>div:nth-child(2){flex:1}.booking-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px}.booking-form-grid label,.booking-description{display:block;color:var(--muted-foreground);font-size:10px}.booking-form-grid select{display:block;width:100%;margin-top:6px;border:1px solid var(--border);background:var(--ivory);border-radius:9px;padding:10px;color:var(--ink);font-size:11px;outline:0}.booking-description textarea{display:block;width:100%;margin-top:6px;border:1px solid var(--border);background:var(--ivory);border-radius:9px;padding:10px;color:var(--ink);font-size:11px;outline:0;resize:vertical}.emergency-toggle{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:11px;padding:12px;margin-top:13px;background:#fbfaf6}.emergency-toggle.selected{background:var(--danger-soft);border-color:rgba(168,92,77,.25)}.emergency-toggle>div{flex:1}.emergency-toggle strong,.emergency-toggle small{display:flex;align-items:center;gap:5px}.emergency-toggle strong{font-size:11px}.emergency-toggle strong svg{color:var(--danger)}.emergency-toggle small{color:var(--muted-foreground);font-size:9px;margin-top:4px;line-height:1.45}.emergency-toggle>button{border:0;background:#d8ddd7;border-radius:999px;width:36px;height:20px;padding:2px;position:relative}.emergency-toggle>button span{display:block;width:16px;height:16px;border-radius:50%;background:#fff;transition:.18s var(--ease)}.emergency-toggle.selected>button{background:var(--danger)}.emergency-toggle.selected>button span{transform:translateX(16px)}.estimate-card{display:flex;align-items:center;justify-content:space-between;background:var(--teal-soft);border-radius:11px;padding:13px;margin:13px 0 16px}.estimate-card small,.estimate-card strong{display:block}.estimate-card small{color:#668078;font-size:9px}.estimate-card strong{font:600 22px "Manrope", sans-serif;margin-top:3px}.estimate-card>span{font-size:10px;color:var(--forest);background:rgba(255,253,248,.6);border-radius:999px;padding:6px 8px}.booking-modal>.app-button{width:100%;justify-content:center}.modal-title-row{display:flex;justify-content:space-between;align-items:center;gap:15px}.modal-title-row h2{margin-bottom:5px}.modal-title-row p{color:var(--muted-foreground);font-size:11px;margin:0}.emergency-banner{display:flex;align-items:flex-start;gap:8px;background:var(--danger-soft);border-radius:10px;padding:11px;margin-top:17px;color:var(--danger)}.emergency-banner span{display:block}.emergency-banner strong,.emergency-banner small{display:block}.emergency-banner strong{font-size:11px;color:var(--ink)}.emergency-banner small{font-size:10px;margin-top:3px}.receipt-card{background:var(--sage-soft);border-radius:11px;padding:13px;display:grid;grid-template-columns:auto 1fr;gap:9px;color:#5f896b}.receipt-check{width:31px;height:31px;border-radius:50%;background:var(--paper);display:grid;place-items:center}.receipt-card>div:nth-child(2) strong,.receipt-card>div:nth-child(2) small{display:block}.receipt-card>div:nth-child(2) strong{font:600 12px "Manrope", sans-serif;color:var(--ink)}.receipt-card>div:nth-child(2) small{font-size:9px;margin-top:3px}.rating-block{grid-column:1/-1;border-top:1px solid rgba(95,137,107,.17);padding-top:11px;margin-top:4px}.rating-block>span{display:block;font-size:10px;color:var(--ink-soft);margin-bottom:6px}.star{border:0;background:transparent;color:#c8c9bd;padding:1px}.star.selected{color:var(--brass)}.rating-block .app-button{margin-top:9px;padding:8px 11px;font-size:10px}.booking-form-modal{max-height:calc(100vh - 30px);overflow:auto}
+@media(max-width:720px){.booking-form-grid{grid-template-columns:1fr}.detail-modal{max-height:calc(100vh - 30px);overflow:auto}.modal-title-row{align-items:flex-start;flex-direction:column;gap:8px}}
+
+/* Brand shell / atlas motif pass: make Sahaay ownership and provenance visible before the data modules. */
+.topbar-brand{display:flex;align-items:center;gap:8px}.topbar-brand .brand-mark{width:24px;height:24px;border-radius:7px;transform:scale(.83);transform-origin:left center;margin-right:-4px}.topbar-brand strong{font:600 13px "Manrope", sans-serif;letter-spacing:-.04em}.topbar-brand span{font-size:10px;color:var(--muted-foreground)}.atlas-ribbon{display:flex;align-items:center;gap:9px;color:var(--muted-foreground);font-size:9px;letter-spacing:.1em;margin-bottom:31px}.atlas-ribbon strong{font:600 10px "Manrope", sans-serif;color:var(--forest);letter-spacing:.12em}.ribbon-index{width:22px;height:22px;border-radius:7px;background:var(--forest);color:var(--paper);display:grid;place-items:center;font:600 10px "Manrope", sans-serif;letter-spacing:0}.ribbon-line{height:1px;flex:1;background:var(--border)}.atlas-ribbon i{font-style:normal;color:var(--forest);padding:0 2px}.handoff-note{display:flex;align-items:center;gap:7px;border-top:1px solid var(--border);margin-top:18px;padding-top:12px;color:#698075;font-size:10px}.handoff-note svg{color:var(--forest);flex:0 0 auto}.handoff-note strong{color:var(--ink)}
+@media(max-width:720px){.topbar-brand{display:flex}.atlas-ribbon{margin-bottom:24px;flex-wrap:wrap}.atlas-ribbon .ribbon-line{display:none}.atlas-ribbon>span:last-child{width:100%;padding-left:31px}.topbar-brand span{display:none}}
+
+/* Edge-state additions: keep destructive actions restrained and make simulated payment explicit. */
+.modal-actions{display:flex;gap:8px;align-items:center}.modal-actions .app-button{flex:1;justify-content:center}.payment-block{background:#f7f5ef;border:1px solid var(--border);border-radius:11px;padding:12px}.payment-block>span{display:block;color:var(--muted-foreground);font-size:10px;margin-bottom:8px}.payment-choices{display:flex;gap:7px;margin-bottom:10px}.payment-choices button{flex:1;border:1px solid var(--border);background:var(--paper);color:var(--muted-foreground);border-radius:8px;padding:8px;font-size:10px}.payment-choices button.selected{background:var(--teal-soft);color:var(--forest);border-color:rgba(23,107,98,.25)}.payment-block .app-button{width:100%;justify-content:center;padding:9px 11px;font-size:10px}.issue-row .status-info{background:var(--sage-soft);color:#5d8968}
+@media(max-width:720px){.modal-actions{flex-direction:column}.modal-actions .app-button{width:100%}}
+
+/* Access surfaces: use the same atlas grammar, with a calm split composition and explicit demo honesty. */
+.auth-layout{display:grid;grid-template-columns:.9fr 1fr;gap:clamp(34px,8vw,120px);align-items:start;max-width:1080px;min-height:calc(100vh - 210px);padding:24px 0 60px}.auth-story{max-width:450px;position:sticky;top:32px}.auth-mark{margin-bottom:31px}.auth-mark .brand-mark{width:48px;height:48px;border-radius:14px;transform:scale(1.24);transform-origin:left center;margin-bottom:10px}.auth-story h1{font:600 clamp(48px,5.4vw,76px)/.94 "Manrope", sans-serif;letter-spacing:-.08em;margin:20px 0}.auth-story h1 em{font-style:normal;color:var(--forest)}.auth-story>p:not(.eyebrow){max-width:370px;color:var(--muted-foreground);font-size:15px;line-height:1.65}.auth-proof{display:flex;align-items:center;gap:10px;margin-top:28px;color:var(--forest)}.auth-proof>span strong,.auth-proof>span small{display:block}.auth-proof>span strong{font:600 12px "Manrope", sans-serif;color:var(--ink)}.auth-proof>span small{font-size:10px;color:var(--muted-foreground);margin-top:3px}.auth-card{padding:28px 32px;max-width:530px;width:100%;min-height:540px;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--border);border-radius:16px;box-shadow:0 12px 32px rgba(30,40,35,.06);box-sizing:border-box}.auth-tabs,.account-role-tabs{display:flex;gap:15px;border-bottom:1px solid var(--border)}.auth-tabs button,.account-role-tabs button{border:0;background:transparent;color:var(--muted-foreground);font-size:11px;padding:0 1px 12px;border-bottom:2px solid transparent;cursor:pointer}.auth-tabs button.active,.account-role-tabs button.active{color:var(--forest);border-bottom-color:var(--forest);font-weight:600}.auth-card-head{padding:20px 0 16px}.auth-card-head .eyebrow{margin:0}.auth-card-head h2{font:600 28px "Manrope", sans-serif;letter-spacing:-.06em;margin:10px 0 6px}.auth-card-head>p:last-child{font-size:11.5px;color:var(--muted-foreground);margin:0;line-height:1.5}.account-role-tabs{gap:0;margin-bottom:18px}.account-role-tabs button{flex:1}.auth-bottom-actions{margin-top:auto;padding-top:12px;display:flex;flex-direction:column}
+.auth-card label,.auth-two-col label,.auth-form-stack label{display:block;color:var(--ink);font-size:11.5px;font-weight:600;margin-bottom:12px;letter-spacing:-.01em}
+.auth-card label .label-text,.auth-form-stack label .label-text{display:flex;justify-content:space-between;align-items:center;color:var(--ink);font-size:11.5px;font-weight:600;margin-bottom:6px}
+.auth-card label input,.auth-card label select,.auth-two-col input,.auth-two-col select,.auth-form-stack input,.auth-form-stack select,.auth-card input,.auth-card select{display:block;width:100%;height:42px;border:1.5px solid var(--border);background:#fff;color:var(--ink);border-radius:9px;outline:0;padding:0 13px;margin-top:6px;font-size:12.5px;font-family:inherit;box-sizing:border-box;transition:border-color .15s ease,box-shadow .15s ease,background .15s ease}
+.auth-card input:focus,.auth-card select:focus,.auth-two-col select:focus,.auth-form-stack input:focus{border-color:var(--forest);background:#fff;box-shadow:0 0 0 3px rgba(23,107,98,.12)}
+.auth-card input::placeholder,.auth-form-stack input::placeholder{color:#9ea8a1;font-size:12px}
+.auth-two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.auth-form-stack{display:flex;flex-direction:column;gap:11px;margin-bottom:12px}
+.auth-card .app-button{width:100%;justify-content:center;margin-top:10px;height:44px;font-size:13px;font-weight:600}
+.auth-fineprint{color:var(--muted-foreground);font-size:9.5px;line-height:1.5;margin:15px 0 0;text-align:center}
+.admin-signup-alert{background:rgba(23,107,98,.06);border:1px solid rgba(23,107,98,.2);border-radius:10px;padding:11px 13px;margin:2px 0 4px;display:flex;flex-direction:column;gap:4px}
+.admin-signup-alert .alert-title{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:var(--forest-dark)}
+.admin-signup-alert p{margin:0;font-size:11px;color:var(--ink-soft);line-height:1.45}
+.admin-demo-note{display:flex;align-items:flex-start;gap:9px;background:var(--teal-soft);color:var(--forest);border-radius:9px;padding:11px;margin-bottom:14px}.admin-demo-note span strong,.admin-demo-note span small{display:block}.admin-demo-note span strong{font-size:11px;color:var(--ink)}.admin-demo-note span small{font-size:9px;color:#668078;margin-top:3px;line-height:1.45}.profile-mini{border:0;background:transparent;width:100%;text-align:left}
+@media(max-width:900px){.auth-layout{gap:36px}.auth-story h1{font-size:56px}}
+@media(max-width:720px){.auth-layout{display:block;min-height:0}.auth-story{margin-bottom:32px}.auth-story h1{font-size:48px}.auth-mark{margin-bottom:24px}.auth-card{padding:20px}.auth-card-head{padding:23px 0 17px}}
+
+/* ── Skeleton loading states ─────────────────────────────────────────────── */
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+.skeleton{display:block;border-radius:8px;background:linear-gradient(90deg,var(--muted) 25%,rgba(231,229,220,.55) 50%,var(--muted) 75%);background-size:200% 100%;animation:shimmer 1.6s ease-in-out infinite}
+.skeleton-kpi{height:125px;border-radius:14px;width:100%}
+.skeleton-row{height:62px;border-radius:10px;margin-bottom:3px;width:100%}
+.skeleton-card{height:168px;border-radius:15px;width:100%}
+.skeleton-text{height:12px;width:70%;margin:6px 0}
+.skeleton-text.short{width:45%}
+.kpi-grid.loading .kpi{visibility:hidden;position:relative}.kpi-grid.loading::before,.kpi-grid.loading::after{display:none}
+.booking-list.loading,.worker-grid.loading{display:grid;gap:10px}
+.booking-list.loading{gap:4px}
+
+/* ── Rating comment textarea ─────────────────────────────────────────────── */
+.rating-comment{display:block;width:100%;border:1px solid var(--border);border-radius:9px;padding:9px;color:var(--ink);font-size:11px;resize:vertical;outline:0;background:var(--ivory);margin-top:8px;font-family:inherit}
+
+/* ── Rejected row state ──────────────────────────────────────────────────── */
+.rejected-row{background:var(--danger-soft);color:var(--danger)}.rejected-row strong{color:var(--ink)}
+
+/* ── Keyboard focus visibility (WCAG 2.1 AA) ────────────────────────────── */
+:focus-visible{outline:2.5px solid var(--forest);outline-offset:3px;border-radius:5px}
+button:focus-visible,a:focus-visible{outline:2.5px solid var(--forest);outline-offset:3px}
+.modal-backdrop:focus-visible{outline:none}
+
+/* ── Skip-to-content link ────────────────────────────────────────────────── */
+.skip-link{position:fixed;top:-999px;left:50%;transform:translateX(-50%);background:var(--forest);color:var(--paper);padding:10px 20px;border-radius:999px;font-size:12px;z-index:9999;text-decoration:none;font-weight:600}.skip-link:focus{top:12px}
+
+/* ── Tablet layout (1050px) — expanded ─────────────────────────────────── */
+@media(max-width:1050px){
+  .app-rail{width:210px}
+  .app-main{margin-left:210px;width:calc(100% - 210px)}
+  .worker-grid{grid-template-columns:1fr}
+  .dashboard-grid,.admin-grid,.issues-layout,.worker-dash-grid{grid-template-columns:1fr}
+  .booking-row{grid-template-columns:.75fr 1.2fr .6fr .8fr auto}
+  .kpi-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .page-title h1{font-size:clamp(34px,3.8vw,52px)}
+  .auth-layout{grid-template-columns:1fr;min-height:0}.auth-story{max-width:100%;margin-bottom:28px}
+  .detail-drawer{width:min(420px,100%)}
+  .booking-modal{width:min(460px,calc(100% - 24px))}
+  .content-wrap{padding:44px 3.2vw 80px;width:100%;box-sizing:border-box}
+  .table-tools{gap:6px}
+  .profile-layout{grid-template-columns:1fr}
+}
+.worker-dash-grid .welfare-panel{grid-column:1/-1}
+
+/* ── Live Tracking & Grievance enhancements ────────────────────────────── */
+.pulse-radar{display:inline-flex;align-items:center;gap:6px;background:var(--teal-soft);color:var(--forest);border-radius:999px;padding:4px 10px;font-size:10px;font-weight:600}
+.pulse-radar i{width:8px;height:8px;border-radius:50%;background:var(--forest);box-shadow:0 0 0 0 rgba(23,107,98,.6);animation:radar-pulse 1.8s infinite}
+@keyframes radar-pulse{0%{transform:scale(.95);box-shadow:0 0 0 0 rgba(23,107,98,.7)}70%{transform:scale(1);box-shadow:0 0 0 8px rgba(23,107,98,0)}100%{transform:scale(.95);box-shadow:0 0 0 0 rgba(23,107,98,0)}}
+.grievance-tabs{display:flex;gap:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.grievance-tabs button{border:0;background:transparent;color:var(--muted-foreground);font-size:12px;padding:0 0 10px;border-bottom:2px solid transparent;cursor:pointer}
+.grievance-tabs button.active{color:var(--ink);font-weight:600;border-bottom-color:var(--forest)}
+.grievance-tabs button b{background:var(--teal-soft);color:var(--forest);border-radius:999px;padding:2px 6px;font-size:10px;margin-left:6px}
+
+/* ── Profile Setup & Management ─────────────────────────────────────────── */
+.profile-layout{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start}
+.profile-hero{padding:28px 24px;text-align:center}
+.profile-hero .avatar{width:72px;height:72px;font-size:22px;margin:0 auto 14px}
+.profile-hero h2{font:600 22px "Manrope", sans-serif;letter-spacing:-.04em;margin:0 0 4px}
+.profile-hero p{font-size:12px;color:var(--muted-foreground);margin:0 0 16px}
+.profile-tabs{display:flex;gap:12px;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto}
+.profile-tabs button{border:0;background:transparent;color:var(--muted-foreground);font-size:12px;padding:8px 2px 12px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+.profile-tabs button.active{color:var(--forest);font-weight:600;border-bottom-color:var(--forest)}
+.profile-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:22px}
+.profile-form-grid label{display:block;font-size:11px;color:var(--muted-foreground)}
+.profile-form-grid input,.profile-form-grid select,.profile-form-grid textarea{display:block;width:100%;border:1px solid var(--border);background:var(--ivory);border-radius:9px;outline:0;padding:10px 12px;margin-top:6px;color:var(--ink);font-size:12px}
+.profile-form-grid textarea{resize:vertical}
+.profile-full-width{grid-column:1/-1}
+.profile-save-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 22px;background:#fbfaf6;border-top:1px solid var(--border)}
+@media(max-width:900px){.profile-layout{grid-template-columns:1fr}.profile-form-grid{grid-template-columns:1fr}}
+
+/* ── Integrated Payment Gateway & Cash Voucher ───────────────────────────── */
+.gateway-wrap{background:var(--paper);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;margin-top:14px;box-shadow:0 6px 22px rgba(25,35,30,.06)}
+.gateway-header{padding:14px 18px;background:var(--teal-soft);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(23,107,98,.12)}
+.gateway-header strong{font-size:12px;color:var(--forest-dark);display:flex;align-items:center;gap:6px}
+.gateway-header span{font-size:10px;color:var(--forest);background:rgba(255,253,248,.8);padding:3px 8px;border-radius:999px;font-weight:600}
+.gateway-methods{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px 12px;border-bottom:1px solid var(--border);background:var(--ivory)}
+.gateway-method-btn{border:1.5px solid var(--border);background:var(--paper);border-radius:9px;padding:10px 4px;text-align:center;cursor:pointer;transition:.15s;font-size:11px;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.gateway-method-btn.active{background:var(--paper);border-color:var(--forest);color:var(--forest-dark);font-weight:700;box-shadow:0 3px 12px rgba(23,107,98,.16)}
+.gateway-method-btn svg{color:currentColor}
+.gateway-body{padding:20px 20px 24px}
+.upi-qr-box{display:flex;flex-direction:column;align-items:center;padding:12px 0;text-align:center}
+.upi-qr-svg{background:#fff;padding:10px;border-radius:12px;border:1px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,.06);margin-bottom:12px}
+.upi-id-pill{display:inline-flex;align-items:center;gap:8px;background:var(--ivory);border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.upi-apps-row{display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.upi-app-chip{border:1px solid var(--border);background:var(--paper);border-radius:8px;padding:6px 12px;font-size:10px;cursor:pointer;transition:.15s}
+.upi-app-chip:hover{border-color:var(--forest);color:var(--forest)}
+.card-preview{background:linear-gradient(135deg,#176b62,#10524b);color:#fff;border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 8px 20px rgba(23,107,98,.25)}
+.card-preview .card-chip{width:32px;height:24px;border-radius:5px;background:#e5c158;margin-bottom:14px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#333;font-weight:bold}
+.card-preview .card-num{font-family:monospace;font-size:16px;letter-spacing:.14em;margin-bottom:12px}
+.card-preview .card-foot{display:flex;justify-content:space-between;font-size:10px;text-transform:uppercase;opacity:.9}
+.card-inputs-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.card-inputs-grid label{display:block;font-size:10px;color:var(--muted-foreground)}
+.card-inputs-grid input{display:block;width:100%;border:1px solid var(--border);background:var(--ivory);border-radius:8px;padding:9px 10px;font-size:12px;color:var(--ink);outline:0;margin-top:4px}
+.otp-screen{background:#fdfcf9;border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+.otp-screen h4{font-size:14px;margin:0 0 6px;color:var(--ink)}
+.otp-screen p{font-size:11px;color:var(--muted-foreground);margin:0 0 16px}
+.otp-input{font-family:monospace;font-size:22px;letter-spacing:.4em;text-align:center;width:180px;margin:0 auto 16px;padding:8px;border:2px solid var(--forest);border-radius:8px;outline:0;background:#fff}
+.cash-voucher-card{background:#fefbf4;border:1px dashed #d1b886;border-radius:12px;padding:18px;margin-bottom:16px;position:relative}
+.cash-voucher-card::before,.cash-voucher-card::after{content:"";position:absolute;width:16px;height:16px;background:var(--paper);border-radius:50%;top:50%;transform:translateY(-50%)}
+.cash-voucher-card::before{left:-9px}
+.cash-voucher-card::after{right:-9px}
+.cash-voucher-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ebdcb8;padding-bottom:10px;margin-bottom:12px}
+.cash-voucher-head strong{font-size:12px;color:#7a5c1c}
+.cash-pin-box{background:#f4ebd4;border-radius:8px;padding:10px;text-align:center;margin:12px 0}
+.cash-pin-box span{display:block;font-size:10px;color:#7a5c1c;margin-bottom:2px}
+.cash-pin-box strong{font-family:monospace;font-size:24px;letter-spacing:.2em;color:#4a360d}
+.official-invoice{background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.04);margin-top:14px}
+.invoice-top{display:flex;align-items:start;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:16px}
+.invoice-top h3{font:600 17px "Manrope", sans-serif;margin:0}
+.invoice-top p{font-size:10px;color:var(--muted-foreground);margin:3px 0 0}
+.invoice-table{width:100%;border-collapse:collapse;font-size:11px;margin:14px 0}
+.invoice-table th{text-align:left;border-bottom:1px solid var(--border);padding:6px 0;color:var(--muted-foreground);font-size:10px;text-transform:uppercase}
+.invoice-table td{padding:8px 0;border-bottom:1px solid #f2f0ea}
+.invoice-total-row td{border-bottom:2px solid var(--ink);font-weight:600;font-size:13px;padding-top:10px}
+.invoice-footer{display:flex;align-items:center;justify-content:space-between;padding-top:14px;font-size:10px;color:var(--muted-foreground)}
+@media(max-width:720px){.gateway-methods{grid-template-columns:repeat(2,1fr)}}
+
+/* ── Booking Modal Payment Option Selector ────────────────────────────────── */
+.payment-choice-section{margin:16px 0 14px;padding:14px 16px;background:var(--ivory);border:1px solid var(--border);border-radius:13px}
+.payment-choice-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.payment-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.payment-choice-card{border:1.5px solid var(--border);background:var(--paper);border-radius:11px;padding:13px 12px;cursor:pointer;text-align:left;transition:all .18s var(--ease);display:flex;gap:11px;align-items:flex-start;position:relative}
+.payment-choice-card:hover{border-color:var(--forest);transform:translateY(-1px);box-shadow:0 4px 12px rgba(23,107,98,.06)}
+.payment-choice-card.active{border-color:var(--forest);background:var(--paper);box-shadow:0 4px 16px rgba(23,107,98,.12)}
+.payment-choice-card.active.cash-card{border-color:var(--brass);box-shadow:0 4px 16px rgba(200,148,57,.15)}
+.payment-choice-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);display:grid;place-items:center;margin-top:2px;flex-shrink:0;transition:.15s}
+.payment-choice-card.active .payment-choice-radio{border-color:var(--forest)}
+.payment-choice-card.active.cash-card .payment-choice-radio{border-color:var(--brass)}
+.payment-choice-card.active .payment-choice-radio span{width:8px;height:8px;border-radius:50%;background:var(--forest)}
+.payment-choice-card.active.cash-card .payment-choice-radio span{background:var(--brass)}
+.payment-choice-icon-wrap{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex-shrink:0}
+.payment-choice-body{flex:1;min-width:0}
+.payment-choice-title{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.payment-choice-title strong{font:600 12px "Manrope",sans-serif;color:var(--ink)}
+.payment-choice-body p{margin:0;font-size:10px;line-height:1.45;color:var(--muted-foreground)}
+.badge-pill{font-size:9px;font-weight:600;padding:2px 7px;border-radius:999px;letter-spacing:.02em}
+.cash-direct-box{background:var(--paper);border:1px solid var(--border);border-radius:11px;padding:14px;margin-top:12px;animation:fade .18s ease-out}
+@media(max-width:600px){.payment-choice-grid{grid-template-columns:1fr}}
+
+/* ── 5-Minute Free Cancellation Window & Worker Auto-Release ────────────── */
+.cancel-timer-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:10px;margin:12px 0 8px;font-size:11px}
+.cancel-timer-banner.active{background:var(--teal-soft);border:1px solid rgba(23,107,98,.18);color:var(--forest-dark)}
+.cancel-timer-banner.active strong{color:var(--forest);font-family:monospace;font-size:13px;letter-spacing:.04em}
+.cancel-timer-banner.expired{background:rgba(200,148,57,.12);border:1px solid rgba(200,148,57,.25);color:#7a5c1c}
+.cancel-timer-banner.expired strong{color:#7a5c1c}
+.auto-release-card{background:var(--danger-soft);border:1px solid rgba(168,92,77,.25);border-radius:11px;padding:14px;margin:12px 0}
+.auto-release-card h4{font:600 13px "Manrope",sans-serif;color:var(--danger);margin:0 0 4px;display:flex;align-items:center;gap:6px}
+.auto-release-card p{font-size:11px;color:var(--ink-soft);line-height:1.45;margin:0 0 10px}
+.cancel-confirm-box{background:#fff;border:1.5px solid var(--danger);border-radius:12px;padding:16px;margin-top:12px;box-shadow:0 4px 16px rgba(168,92,77,.1)}
+.cancel-confirm-box strong{display:block;font-size:13px;color:var(--danger);margin-bottom:6px}
+.cancel-confirm-box p{font-size:11px;color:var(--ink-soft);line-height:1.45;margin:0 0 12px}
+.worker-timer-pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:999px;background:rgba(200,148,57,.14);color:#7a5c1c}
+
+/* ── Razorpay Secure Demo Checkout & Settlement Styles ───────────────────── */
+.razorpay-card{background:#fff;border:1.5px solid #0c2340;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(12,35,64,.12);margin-bottom:0}
+.razorpay-header{background:linear-gradient(135deg,#0c2340 0%,#173f6f 100%);color:#fff;padding:15px 18px;display:flex;align-items:center;justify-content:space-between}
+.razorpay-brand{display:flex;align-items:center;gap:8px}
+.razorpay-logo-badge{background:#0c83ff;color:#fff;font-weight:800;font-size:11px;letter-spacing:.05em;padding:3px 7px;border-radius:4px;display:inline-flex;align-items:center;gap:3px}
+.razorpay-amount-box{text-align:right}
+.razorpay-amount-box span{font-size:10px;opacity:.85;display:block}
+.razorpay-amount-box strong{font-size:18px;font-family:'Manrope',sans-serif;color:#60a5fa}
+.razorpay-body{padding:18px 18px 22px}
+.razorpay-merchant-info{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:14px;font-size:11px}
+.razorpay-tabs{display:flex;gap:6px;margin-bottom:14px}
+.razorpay-tab{flex:1;padding:9px 10px;font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--ivory);border-radius:8px;cursor:pointer;text-align:center;transition:all .15s;color:var(--ink-soft)}
+.razorpay-tab.active{background:#0c2340;border-color:#0c2340;color:#fff}
+.razorpay-test-pills{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px}
+.razorpay-pill{font-size:10.5px;background:rgba(12,131,255,.08);border:1px solid rgba(12,131,255,.25);color:#0c83ff;border-radius:6px;padding:6px 11px;cursor:pointer;font-weight:600;transition:.15s}
+.razorpay-pill:hover{background:rgba(12,131,255,.16)}
+.razorpay-trust-footer{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:10.5px;color:var(--muted-foreground)}
+
+/* Full-width, prominent action buttons inside payment forms with plenty of bottom clearance */
+.gateway-body .app-button,
+.razorpay-card .app-button,
+.upi-qr-box .app-button,
+.cash-voucher-card .app-button{
+  width:100% !important;
+  justify-content:center !important;
+  padding:14px 20px !important;
+  font-size:13.5px !important;
+  font-weight:700 !important;
+  border-radius:10px !important;
+  margin-top:14px !important;
+  margin-bottom:6px !important;
+  cursor:pointer;
+  box-sizing:border-box;
+}
+
+.razorpay-card .app-button{
+  background:linear-gradient(135deg,#0c2340 0%,#0c83ff 140%) !important;
+  color:#fff !important;
+  border:none !important;
+  box-shadow:0 6px 18px rgba(12,131,255,.3) !important;
+}
+
+.razorpay-card .app-button:hover{
+  background:linear-gradient(135deg,#081a30 0%,#0a74e3 140%) !important;
+  transform:translateY(-1px);
+  box-shadow:0 8px 24px rgba(12,131,255,.4) !important;
+}
+
+.detail-modal{
+  max-height:min(90vh,880px);
+  overflow-y:auto;
+  box-sizing:border-box;
+}
+
+/* ── Worker Dashboard Settlement Alert & Ledger ───────────────────────────── */
+.worker-payment-notification{background:linear-gradient(135deg,rgba(23,107,98,.1),rgba(23,107,98,.04));border:1.5px solid var(--forest);border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.settled-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;background:rgba(23,107,98,.12);color:var(--forest)}
+.awaiting-settlement-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;background:rgba(200,148,57,.12);color:#7a5c1c}
+
+/* ── Authentic Razorpay Interactive Checkout Modal ───────────────────────── */
+.rzp-overlay{position:fixed;inset:0;z-index:1200;background:rgba(12,35,64,.68);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px;animation:fade .18s ease-out;box-sizing:border-box}
+.rzp-modal{width:min(440px,100%);background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(12,35,64,.35),0 0 0 1px rgba(12,35,64,.08);animation:rise .22s var(--ease);position:relative;max-height:calc(100vh - 40px);overflow-y:auto;box-sizing:border-box}
+.rzp-modal-header{background:#0c2340;color:#fff;padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+.rzp-modal-body{padding:20px 22px 24px}
+.rzp-pay-btn{background:linear-gradient(135deg,#0c83ff 0%,#0066cc 100%);color:#fff;border:none;border-radius:10px;width:100%;padding:14px 18px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s ease;box-shadow:0 4px 16px rgba(12,131,255,.35);margin-top:16px}
+.rzp-pay-btn:hover{background:linear-gradient(135deg,#0b78e6 0%,#005bb8 100%);transform:translateY(-1px);box-shadow:0 6px 20px rgba(12,131,255,.45)}
+.rzp-pay-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.rzp-pill{border:1px solid rgba(12,131,255,.2);background:rgba(12,131,255,.05);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:600;color:#0c83ff;cursor:pointer;transition:.15s}
+.rzp-pill:hover{background:rgba(12,131,255,.12);border-color:#0c83ff}
+.rzp-pill.active{background:#0c2340;color:#fff;border-color:#0c2340}
+
+/* ── Back to Landing Page Button ─────────────────────────────────────────── */
+.back-landing-pill{display:inline-flex;align-items:center;gap:7px;background:var(--paper);border:1px solid var(--border);border-radius:999px;padding:8px 15px;font-size:11.5px;font-weight:600;color:var(--ink);text-decoration:none;margin-bottom:18px;cursor:pointer;transition:all .15s ease;box-shadow:0 2px 6px rgba(44,54,43,.04)}
+.back-landing-pill:hover{background:var(--ivory);border-color:var(--forest);color:var(--forest);transform:translateX(-2px)}
+
+/* ── Admin Command Workspace Tabs & Controls ─────────────────────────────── */
+.admin-workspace-tabs{display:flex;gap:10px;border-bottom:1px solid var(--border);margin:18px 0 20px;padding-bottom:2px;overflow-x:auto}
+.admin-workspace-tab{border:0;background:transparent;color:var(--muted-foreground);font-size:12px;font-weight:600;padding:8px 14px 12px;border-bottom:2px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:all .15s ease}
+.admin-workspace-tab:hover{color:var(--ink)}
+.admin-workspace-tab.active{color:var(--forest);border-bottom-color:var(--forest)}
+.admin-workspace-tab b{background:var(--teal-soft);color:var(--forest-dark);border-radius:999px;padding:2px 7px;font-size:9.5px}
+.admin-bulletin-box{background:linear-gradient(135deg,rgba(23,107,98,.08),rgba(23,107,98,.02));border:1px solid rgba(23,107,98,.2);border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.admin-booking-controls{margin-top:14px;padding:14px 16px;background:var(--paper);border:1px solid var(--border);border-radius:12px}
+
+/* ── Cooperative Society Anti-Fraud Verification ─────────────────────────── */
+.society-verification-card{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.rcs-seal{display:inline-flex;align-items:center;gap:6px;background:rgba(23,107,98,.1);border:1px solid rgba(23,107,98,.25);color:var(--forest);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:.02em}
+.rcs-seal.pending{background:rgba(200,148,57,.12);border-color:rgba(200,148,57,.3);color:#7a5c1c}
+.rcs-check-btn{border:1px solid var(--forest);background:var(--teal-soft);color:var(--forest-dark);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s ease}
+.rcs-check-btn:hover{background:var(--forest);color:#fff}
+
+/* ── Worker Sovereign Financial Privacy Shield ───────────────────────────── */
+.privacy-shield-pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;background:rgba(44,54,43,.08);color:var(--ink-soft);border:1px solid rgba(44,54,43,.15)}
+.privacy-toggle-card{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin:14px 0;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.privacy-lock-notice{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#7a5c1c;background:rgba(200,148,57,.1);border:1px solid rgba(200,148,57,.25);padding:4px 10px;border-radius:8px}
+
+/* ── Admin Detailed Analytics Hub ────────────────────────────────────────── */
+.admin-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px}
+.analytics-card{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.category-metric-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:11.5px}
+.category-progress-track{height:6px;border-radius:999px;background:var(--ivory);overflow:hidden;margin-bottom:12px}
+.category-progress-fill{height:100%;border-radius:999px;background:var(--forest);transition:width .3s ease}
+
+/* ── Member Deep Profile Dossier Modal ────────────────────────────────────── */
+.member-dossier-modal{max-width:640px;width:100%}
+.dossier-header{display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.dossier-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;font-size:11.5px}
+.dossier-item{background:var(--ivory);padding:10px 14px;border-radius:8px;border:1px solid var(--border)}
+.dossier-item small{display:block;font-size:9.5px;color:var(--muted-foreground);text-transform:uppercase;margin-bottom:3px;font-weight:600}
+
+/* ── State RCS Official Oversight Panel & 12h Audit Gate ─────────────────── */
+.official-desk{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+.society-audit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:20px}
+.audit-card{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;transition:all .15s ease}
+.audit-card.pending{border-color:rgba(200,148,57,.4);box-shadow:0 2px 10px rgba(200,148,57,.06)}
+.audit-card.approved{border-color:rgba(23,107,98,.35)}
+.audit-doc-chip{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;background:var(--ivory);border:1px solid var(--border);color:var(--forest-dark)}
+.sla-countdown-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(200,148,57,.12);border:1px solid rgba(200,148,57,.3);color:#7a5c1c;padding:3px 9px;border-radius:999px;font-size:10.5px;font-weight:700}
+.sla-countdown-pill.active{background:rgba(23,107,98,.1);border-color:rgba(23,107,98,.25);color:var(--forest)}
+.audit-gate-screen{max-width:680px;margin:24px auto;padding:28px 24px;background:var(--paper);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 24px rgba(44,54,43,.06)}
+.audit-gate-card{background:var(--ivory);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin:16px 0}
+.official-login-hint{background:rgba(23,107,98,.07);border:1px solid rgba(23,107,98,.2);border-radius:9px;padding:10px 14px;margin-bottom:14px;font-size:11.5px;color:var(--forest-dark)}
+.gov-id-tag{display:inline-flex;align-items:center;gap:4px;font-family:monospace;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--ivory);border:1px solid var(--border);color:var(--forest-dark)}
+.dossier-doc-card{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+
+/* ── Cooperative Admin Registration UI & Exact Spacing ─────────────── */
+.admin-reg-group{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+.admin-reg-group-title{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:var(--forest-dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.admin-reg-group-title svg{color:var(--forest)}
+.admin-field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.admin-field-label{display:block;font-size:10.5px;font-weight:600;color:var(--muted-foreground);margin-bottom:10px}
+.admin-field-label input,.admin-field-label select{display:block;width:100%;border:1px solid var(--border);background:var(--ivory);color:var(--ink);border-radius:8px;outline:0;padding:10px 12px;margin-top:5px;font-size:11.5px;font-family:inherit;transition:border-color .15s ease}
+.admin-field-label input:focus,.admin-field-label select:focus{border-color:var(--forest)}
+.admin-field-label input::placeholder{color:#a49e93}
+
+/* ── Worker Busy / Active Job Indicator Styles ── */
+.worker-card.is-busy {
+  border-color: rgba(217, 119, 6, 0.38) !important;
+  background: linear-gradient(180deg, #fffefb 0%, #fffbf2 100%) !important;
+}
+.availability.busy {
+  color: #b45309 !important;
+  font-weight: 600;
+}
+.availability.busy i {
+  background: #f59e0b !important;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.22) !important;
+  animation: pulse-busy 2s infinite ease-in-out;
+}
+@keyframes pulse-busy {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+}
+.worker-busy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.32);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+/* ── Society Profile & Statutory Document Verification ── */
+.society-profile-hero {
+  background: linear-gradient(135deg, rgba(23,107,98,.08) 0%, rgba(200,148,57,.08) 100%);
+  border: 1px solid rgba(23,107,98,.2);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.society-docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+}
+.society-doc-card {
+  background: var(--paper);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  transition: all .18s var(--ease);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.society-doc-card:hover {
+  border-color: var(--forest);
+  box-shadow: 0 6px 18px rgba(23,107,98,.06);
+}
+.society-doc-card.uploaded {
+  border-color: rgba(23,107,98,.35);
+  background: linear-gradient(180deg, #fffdf8 0%, #f9fbf9 100%);
+}
+.society-doc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+.society-doc-badge.uploaded {
+  background: var(--teal-soft);
+  color: var(--forest);
+  border: 1px solid rgba(23,107,98,.25);
+}
+.society-doc-badge.missing {
+  background: rgba(200,148,57,.12);
+  color: #7a5c1c;
+  border: 1px solid rgba(200,148,57,.3);
+}
+
+/* ── Customer Profile Summary Header ── */
+.customer-profile-header {
+  padding: 22px 26px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.customer-profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 240px;
+  flex: 1 1 auto;
+}
+.customer-profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.customer-profile-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.customer-profile-stat-box {
+  text-align: right;
+  padding-right: 14px;
+  border-right: 1px solid var(--border);
+}
+.customer-profile-stat-box strong {
+  display: block;
+  font: 600 18px "Manrope", sans-serif;
+  color: var(--forest);
+  line-height: 1.2;
+}
+.customer-profile-stat-box small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted-foreground);
+  margin-top: 2px;
+  line-height: 1.2;
+}
+.customer-profile-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Official & Admin Audit Meta Grid ── */
+.audit-card-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 11px;
+}
+
+@media (max-width: 720px) {
+  .customer-profile-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px;
+  }
+  .customer-profile-actions {
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .customer-profile-stat-box {
+    text-align: left;
+  }
+  .customer-profile-buttons {
+    width: 100%;
+    margin-top: 4px;
+  }
+  .customer-profile-buttons .app-button {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 540px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

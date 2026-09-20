@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" role="img" aria-label="Co-Labour logo mark">
+  <!-- Outer orbit ring - forest green -->
+  <circle cx="100" cy="100" r="90" stroke="#176B62" stroke-width="13" fill="none"/>
+
+  <!-- House roof -->
+  <path d="M62 92 L100 54 L138 92" fill="#176B62" stroke="#176B62" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- House body / walls -->
+  <rect x="68" y="90" width="64" height="50" rx="2" fill="white"/>
+
+  <!-- Window panes -->
+  <rect x="87" y="97" width="10" height="10" rx="1.5" fill="#8CB5A5"/>
+  <rect x="103" y="97" width="10" height="10" rx="1.5" fill="#8CB5A5"/>
+  <rect x="87" y="111" width="10" height="10" rx="1.5" fill="#8CB5A5"/>
+  <rect x="103" y="111" width="10" height="10" rx="1.5" fill="#8CB5A5"/>
+
+  <!-- Brass doorway arch -->
+  <path d="M90 140 L90 118 Q90 110 100 110 Q110 110 110 118 L110 140 Z" fill="#C9952A"/>
+
+  <!-- Left person (dark forest) body -->
+  <circle cx="63" cy="96" r="10" fill="#1C3D35"/>
+  <path d="M43 130 Q43 112 63 112 Q76 112 82 122" fill="#1C3D35" stroke="none"/>
+
+  <!-- Left arm reaching right -->
+  <path d="M75 108 Q84 112 90 118" stroke="#1C3D35" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+  <!-- Right person (sage green) body -->
+  <circle cx="137" cy="96" r="10" fill="#8CB5A5"/>
+  <path d="M157 130 Q157 112 137 112 Q124 112 118 122" fill="#8CB5A5" stroke="none"/>
+
+  <!-- Right arm reaching left -->
+  <path d="M125 108 Q116 112 110 118" stroke="#8CB5A5" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+  <!-- Bottom platform / bridge rail (forest green) -->
+  <path d="M58 138 L58 130 L82 130 L82 138" fill="#176B62"/>
+  <path d="M118 138 L118 130 L142 130 L142 138" fill="#176B62"/>
+
+  <!-- Sage bell / foundation shape at bottom -->
+  <path d="M82 138 Q82 160 100 172 Q118 160 118 138 Z" fill="#8CB5A5"/>
+</svg>
