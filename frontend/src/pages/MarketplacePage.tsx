@@ -11,7 +11,6 @@ import LandingHeader from "@/components/LandingHeader";
 import {
   MARKETPLACE_CATEGORIES,
   MARKETPLACE_CITIES,
-  MARKETPLACE_WORKERS,
   type MarketplaceWorker,
 } from "@/data/marketplaceWorkers";
 import "@/landing-page.css";
@@ -224,17 +223,8 @@ export default function MarketplacePage() {
               break;
             }
           }
-          // 3. Known area lookup in marketplace workers (e.g. "Kothrud" -> Pune)
           if (!cityFound) {
-            const workerInArea = MARKETPLACE_WORKERS.find(
-              w => w.area.toLowerCase().includes(lowerLoc)
-            );
-            if (workerInArea) {
-              resolvedCity = workerInArea.city;
-              resolvedQuery = rawLocality;
-            } else {
-              resolvedQuery = rawLocality;
-            }
+            resolvedQuery = rawLocality;
           }
         }
       }
@@ -258,14 +248,23 @@ export default function MarketplacePage() {
   const [sortBy, setSortBy]             = useState<"match" | "rating" | "jobs" | "price">("match");
   const [mobileFiltersCollapsed, setMobileFiltersCollapsed] = useState(false);
 
-  // Combine dynamic verified workers and rich marketplace catalog
+  // Strictly display ONLY registered & verified workers from cooperative network — zero mockups
   const filtered = useMemo(() => {
-    const dynamicList: MarketplaceWorker[] = verifiedWorkers.map((w) => {
+    let list: MarketplaceWorker[] = verifiedWorkers.map((w) => {
       let workerCity = "Gurugram";
       if (w.area) {
-        if (/pune/i.test(w.area)) workerCity = "Pune";
-        else if (/mumbai/i.test(w.area)) workerCity = "Mumbai";
-        else if (/gurugram|delhi|noida|gurgaon/i.test(w.area)) workerCity = "Gurugram";
+        const lowerArea = w.area.toLowerCase();
+        if (lowerArea.includes("pune")) workerCity = "Pune";
+        else if (lowerArea.includes("mumbai") || lowerArea.includes("thane")) workerCity = "Mumbai";
+        else if (lowerArea.includes("gurugram") || lowerArea.includes("gurgaon") || lowerArea.includes("delhi") || lowerArea.includes("noida")) workerCity = "Gurugram";
+        else if (lowerArea.includes("bengaluru") || lowerArea.includes("bangalore")) workerCity = "Bengaluru";
+        else {
+          const parts = w.area.split(",");
+          if (parts.length > 1) {
+            const lastPart = parts[parts.length - 1].trim();
+            if (lastPart.length > 2) workerCity = lastPart;
+          }
+        }
       }
       return {
         id: w.id,
@@ -284,10 +283,6 @@ export default function MarketplacePage() {
         matchScore: 94,
       };
     });
-
-    const existingNames = new Set(dynamicList.map(w => w.name.toLowerCase()));
-    const staticList = MARKETPLACE_WORKERS.filter(w => !existingNames.has(w.name.toLowerCase()));
-    let list: MarketplaceWorker[] = [...dynamicList, ...staticList];
 
     if (city !== "All cities") list = list.filter(w => w.city.toLowerCase() === city.toLowerCase());
     if (category !== "All categories") list = list.filter(w => w.service.toLowerCase() === category.toLowerCase());
@@ -539,13 +534,19 @@ export default function MarketplacePage() {
           ) : (
             <div className="marketplace-empty-state">
               <Search size={28} style={{ color: "var(--muted-foreground)", marginBottom: 12, opacity: 0.5 }} />
-              <h3 style={{ margin: "0 0 8px", fontSize: 16, fontWeight: 700, color: "var(--ink)" }}>No workers found</h3>
-              <p style={{ margin: 0, color: "var(--muted-foreground)", fontSize: 13, maxWidth: 400, marginLeft: "auto", marginRight: "auto" }}>
-                Try adjusting your filters or search a different area or service category.
+              <h3 style={{ margin: "0 0 8px", fontSize: 16, fontWeight: 700, color: "var(--ink)" }}>
+                {verifiedWorkers.length === 0 ? "No registered workers in directory yet" : "No workers match your filters"}
+              </h3>
+              <p style={{ margin: 0, color: "var(--muted-foreground)", fontSize: 13, maxWidth: 440, marginLeft: "auto", marginRight: "auto" }}>
+                {verifiedWorkers.length === 0
+                  ? "Workers registered under verified cooperative societies will appear here automatically once approved by the cooperative desk."
+                  : "Try clearing your filters or search a different area or service category."}
               </p>
-              <button onClick={clearFilters} className="landing-button landing-button--small" style={{ marginTop: 18, cursor: "pointer" }}>
-                Clear filters
-              </button>
+              {hasActiveFilters && (
+                <button onClick={clearFilters} className="landing-button landing-button--small" style={{ marginTop: 18, cursor: "pointer" }}>
+                  Clear filters
+                </button>
+              )}
             </div>
           )}
 
