@@ -19,8 +19,15 @@ Co-Labour operates under the statutory framework of the State Cooperative Societ
 
 ```text
 colabour/
-├── frontend/                   # React 19 + Vite Frontend
-│   ├── public/                 # Static brand assets & logos
+├── api/                        # Vercel Serverless Functions
+│   ├── create-order.ts         # Razorpay order generation endpoint
+│   └── verify-payment.ts       # Razorpay cryptographic signature verification
+├── backend/                    # Node.js & Express API Server
+│   ├── index.ts                # Express entrypoint & static production middleware
+│   └── razorpay.ts             # Payment handler & verification logic
+├── frontend/                   # React 19 + Vite Frontend Application
+│   ├── public/                 # Static brand assets & icons
+│   ├── index.html              # HTML entrypoint
 │   └── src/
 │       ├── components/         # Reusable UI components & Radix primitives
 │       │   └── ui/             # Design-system buttons, inputs, dialogs
@@ -39,19 +46,18 @@ colabour/
 │       │   ├── LandingPage.tsx         # Public marketing & hero experience
 │       │   └── MarketplacePage.tsx     # Direct worker booking marketplace
 │       ├── App.tsx             # Root router & application wrapper
-│       ├── index.css           # Executive Cooperative Light design system tokens
+│       ├── index.css           # Executive Cooperative Light design tokens
 │       └── main.tsx            # Application entry point
-├── backend/                    # Express.js Backend API
-│   ├── index.ts                # API server & static middleware
-│   └── razorpay.ts             # Payment endpoints & verification
 ├── shared/                     # Shared TypeScript schemas & database interfaces
 │   └── schema.ts               # Entity definitions
 ├── supabase/                   # Database migrations & RLS policies
 │   └── migrations/             # SQL schema definitions & security policies
 ├── patches/                    # Patched vendor dependencies
 ├── .env.example                # Template for environment configuration
+├── .npmrc                      # Ensures smooth npm install across all npm versions
 ├── package.json                # Project dependencies and npm scripts
 ├── tsconfig.json               # TypeScript compiler configuration
+├── vercel.json                 # Vercel deployment configuration & SPA rewrites
 └── vite.config.ts              # Vite bundler configuration
 ```
 
@@ -60,14 +66,14 @@ colabour/
 ## 🚀 Tech Stack
 
 - **Frontend:** React 19, TypeScript, Vite, Tailwind CSS, Lucide Icons, GSAP, Recharts
-- **Backend:** Node.js, Express.js
+- **Backend / Serverless:** Express.js (local/Node) & Vercel Serverless Functions (`/api/*`)
 - **Database & Auth:** Supabase (PostgreSQL, Row Level Security, Supabase Auth)
 - **Storage:** Supabase Storage (`society-documents` bucket for statutory compliance)
 - **Payments:** Razorpay integration ready
 
 ---
 
-## 🛠️ Getting Started
+## 🛠️ Local Development Setup
 
 ### Prerequisites
 
@@ -87,6 +93,8 @@ cd colabour
 npm install
 ```
 
+*(Note: `.npmrc` is pre-configured with `legacy-peer-deps=true` for 100% friction-free installation across all npm versions).*
+
 ### 3. Configure Environment Variables
 
 Copy `.env.example` to `.env` in the root directory:
@@ -95,32 +103,106 @@ Copy `.env.example` to `.env` in the root directory:
 cp .env.example .env
 ```
 
-Populate the required credentials in `.env`:
+Set your credentials in `.env`:
 
 ```env
-VITE_SUPABASE_URL=https://your-supabase-id.supabase.co
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+
+# Optional: Razorpay Test / Live Credentials
+RAZORPAY_KEY_ID=rzp_test_your_key_id
+RAZORPAY_KEY_SECRET=your_key_secret
+VITE_RAZORPAY_KEY_ID=rzp_test_your_key_id
 ```
 
-### 4. Database Setup
+### 4. Database Setup (Supabase)
 
-Run the SQL migration scripts located in `supabase/migrations/` inside your Supabase SQL Editor:
-1. `001_initial_schema.sql` — Base tables (`societies`, `users`, `worker_profiles`, `bookings`, `claims`, `issues`, `ratings`).
-2. `002_rls_policies.sql` — Row Level Security policies for cooperative access control.
-3. Create a public Storage bucket named `society-documents` with public read access.
+Run the SQL migration scripts located in `supabase/migrations/` inside your [Supabase SQL Editor](https://supabase.com/dashboard):
+1. Execute `001_initial_schema.sql` — Base tables (`societies`, `users`, `worker_profiles`, `bookings`, `claims`, `issues`, `ratings`).
+2. Execute `002_rls_policies.sql` — Row Level Security policies for cooperative access control.
+3. In the Supabase Storage dashboard, create a public Storage bucket named `society-documents` with public read access.
 
-### 5. Run the Application
+### 5. Run Locally
 
 ```bash
-# Start Vite development server
+# Start Vite development server (with HMR)
 npm run dev
 
-# Build for production
+# Run TypeScript type check
+npm run check
+
+# Build production bundle
 npm run build
 
-# Start production server
+# Start local production server (cross-platform)
 npm start
 ```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 🌐 Deploy to Vercel
+
+The project includes a ready-to-use [`vercel.json`](./vercel.json) that automatically handles SPA routing and routes API endpoints to Vercel Serverless Functions.
+
+### Option A: Deploy via Vercel Web Dashboard (Recommended)
+
+1. **Push your code to GitHub** (if you haven't already).
+2. Open the [Vercel Dashboard](https://vercel.com/new) and click **"Add New Project"** > **"Project"**.
+3. Select your GitHub repository: `Suyashrsingh/colabour` and click **"Import"**.
+4. In the **Configure Project** screen:
+   - **Framework Preset**: `Vite` (auto-detected)
+   - **Root Directory**: `./` (leave default)
+   - **Build Command**: `npm run build` (or leave default)
+   - **Output Directory**: `dist/public` *(pre-configured in `vercel.json`)*
+5. Expand **Environment Variables** and add:
+   | Key | Value | Description |
+   | --- | --- | --- |
+   | `VITE_SUPABASE_URL` | `https://your-id.supabase.co` | Your Supabase Project URL |
+   | `VITE_SUPABASE_ANON_KEY` | `eyJhbGci...` | Your Supabase Public Anon Key |
+   | `RAZORPAY_KEY_ID` | `rzp_test_...` | *(Optional)* Razorpay API Key ID |
+   | `RAZORPAY_KEY_SECRET` | `...` | *(Optional)* Razorpay Key Secret |
+   | `VITE_RAZORPAY_KEY_ID` | `rzp_test_...` | *(Optional)* Public Razorpay Key ID |
+6. Click **Deploy**. Vercel will build and launch your live application with an instant HTTPS URL!
+
+---
+
+### Option B: Deploy via Vercel CLI
+
+1. Install the Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+
+2. Log in to Vercel:
+   ```bash
+   vercel login
+   ```
+
+3. Deploy preview:
+   ```bash
+   vercel
+   ```
+
+4. Add your environment variables when prompted or via command:
+   ```bash
+   vercel env add VITE_SUPABASE_URL
+   vercel env add VITE_SUPABASE_ANON_KEY
+   ```
+
+5. Deploy directly to production:
+   ```bash
+   vercel --prod
+   ```
+
+---
+
+## 🔒 Security & Statutory Architecture
+
+- **Row Level Security (RLS)**: Enforced directly at the PostgreSQL layer in Supabase.
+- **Client Document Privacy**: Official documents uploaded by cooperatives are isolated in Supabase Storage with signed or public reference tokens.
+- **No Mock Fallbacks**: Real database records drive member listings, society registrations, claims, and regulatory charter stamps.
 
 ---
 
