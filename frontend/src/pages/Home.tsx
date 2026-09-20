@@ -207,6 +207,7 @@ function AppShell({ role, setRole, screen, setScreen, children }: { role: Role; 
   };
 
   const dashboardRef = useRef<HTMLDivElement>(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     if (screen !== "auth") {
@@ -223,7 +224,138 @@ function AppShell({ role, setRole, screen, setScreen, children }: { role: Role; 
     </div>;
   }
 
-  return <div className="product-shell"><a href="#main-content" className="skip-link">Skip to main content</a><aside className="app-rail" role="navigation" aria-label="Primary navigation"><div className="brand-lockup"><Mark size={52} /><div><strong>Co-Labour</strong><span>CO-OP SERVICES</span></div></div><div className="rail-context"><span className="live-indicator" /> {role === "Admin" ? "Cooperative Admin" : role === "Worker" ? "Worker" : role === "Official" ? "State RCS Official" : "Customer"} <span style={{opacity:0.4,margin:'0 4px'}}>·</span> {profile?.societyName ?? (role === "Official" ? "State Dept of Cooperatives" : "Co-Labour Network")}</div><p className="rail-label">{role === "Admin" ? "COOPERATIVE DESK" : role === "Worker" ? "WORKER DESK" : role === "Official" ? "STATE REGULATORY DESK" : "SERVICE DESK"}</p><nav className="app-nav">{nav.map(({ label, screen: target, icon: Icon, count }) => <button key={label} onClick={() => setScreen(target)} className={screen === target ? "active" : ""}><Icon size={16} /><span>{label}</span>{count && <b>{count}</b>}</button>)}</nav><div className="rail-divider" /><button className={`rail-settings ${screen === "settings" ? "active" : ""}`} onClick={() => setScreen("settings")}><Settings2 size={16} /> Settings</button><div className="rail-footer"><button className="profile-mini" onClick={() => setScreen("auth")}><Avatar initials={displayInitials} /><div><strong>{displayName}</strong><small>{roleLabel(role)} account</small></div><MoreHorizontal size={15} /></button><button onClick={handleSignOut} style={{display:'flex',alignItems:'center',gap:8,width:'100%',border:0,background:'transparent',color:'var(--danger)',padding:'9px 10px',borderRadius:9,fontSize:11,fontWeight:600,cursor:'pointer',transition:'.15s',marginTop:3}} onMouseEnter={e=>(e.currentTarget.style.background='var(--danger-soft)')} onMouseLeave={e=>(e.currentTarget.style.background='transparent')} aria-label="Sign out"><X size={14} />Sign out</button></div></aside><main className="app-main"><header className="app-topbar"><button className="mobile-menu" aria-label="Open navigation menu" aria-expanded={false}><Menu size={18} /></button><div className="topbar-brand"><Mark size={40} /><strong>Co-Labour</strong><span>co-op services</span></div><div className="topbar-center">{role === "Official" ? <button className="command-button" aria-label="Search registered societies, cooperative admins..."><Search size={14} /> Search registered societies, cooperative admins... <kbd>K</kbd></button> : role === "Admin" ? <button className="command-button" aria-label="Search workers, bookings..."><Search size={14} /> Search workers, bookings... <kbd>K</kbd></button> : null}</div><div className="topbar-actions"><button className="icon-button" aria-label="Notifications — no new alerts" aria-live="polite"><Bell size={17} /><i aria-hidden="true" /></button></div></header><div id="main-content" ref={dashboardRef}>{children}</div></main></div>;
+  return (
+    <div className="product-shell">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <aside className="app-rail" role="navigation" aria-label="Primary navigation">
+        <div className="brand-lockup"><Mark size={52} /><div><strong>Co-Labour</strong><span>CO-OP SERVICES</span></div></div>
+        <div className="rail-context"><span className="live-indicator" /> {role === "Admin" ? "Cooperative Admin" : role === "Worker" ? "Worker" : role === "Official" ? "State RCS Official" : "Customer"} <span style={{opacity:0.4,margin:'0 4px'}}>·</span> {profile?.societyName ?? (role === "Official" ? "State Dept of Cooperatives" : "Co-Labour Network")}</div>
+        <p className="rail-label">{role === "Admin" ? "COOPERATIVE DESK" : role === "Worker" ? "WORKER DESK" : role === "Official" ? "STATE REGULATORY DESK" : "SERVICE DESK"}</p>
+        <nav className="app-nav">
+          {nav.map(({ label, screen: target, icon: Icon, count }) => (
+            <button key={label} onClick={() => setScreen(target)} className={screen === target ? "active" : ""}>
+              <Icon size={16} /><span>{label}</span>{count && <b>{count}</b>}
+            </button>
+          ))}
+        </nav>
+        <div className="rail-divider" />
+        <button className={`rail-settings ${screen === "settings" ? "active" : ""}`} onClick={() => setScreen("settings")}>
+          <Settings2 size={16} /> Settings
+        </button>
+        <div className="rail-footer">
+          <button className="profile-mini" onClick={() => setScreen("auth")}>
+            <Avatar initials={displayInitials} />
+            <div><strong>{displayName}</strong><small>{roleLabel(role)} account</small></div>
+            <MoreHorizontal size={15} />
+          </button>
+          <button onClick={handleSignOut} style={{display:'flex',alignItems:'center',gap:8,width:'100%',border:0,background:'transparent',color:'var(--danger)',padding:'9px 10px',borderRadius:9,fontSize:11,fontWeight:600,cursor:'pointer',transition:'.15s',marginTop:3}} onMouseEnter={e=>(e.currentTarget.style.background='var(--danger-soft)')} onMouseLeave={e=>(e.currentTarget.style.background='transparent')} aria-label="Sign out">
+            <X size={14} />Sign out
+          </button>
+        </div>
+      </aside>
+
+      <main className="app-main">
+        <header className="app-topbar">
+          <button
+            className="mobile-menu"
+            aria-label={mobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileNavOpen}
+            onClick={() => setMobileNavOpen(v => !v)}
+            style={{ cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: 8 }}
+          >
+            {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+          <div className="topbar-brand">
+            <Mark size={40} /><strong>Co-Labour</strong><span>co-op services</span>
+          </div>
+          <div className="topbar-center">
+            {role === "Official" ? (
+              <button className="command-button" aria-label="Search registered societies, cooperative admins...">
+                <Search size={14} /> Search registered societies, cooperative admins... <kbd>K</kbd>
+              </button>
+            ) : role === "Admin" ? (
+              <button className="command-button" aria-label="Search workers, bookings...">
+                <Search size={14} /> Search workers, bookings... <kbd>K</kbd>
+              </button>
+            ) : null}
+          </div>
+          <div className="topbar-actions">
+            <button className="icon-button" aria-label="Notifications — no new alerts" aria-live="polite">
+              <Bell size={17} /><i aria-hidden="true" />
+            </button>
+          </div>
+        </header>
+
+        {/* Mobile Navigation Drawer for Dashboard */}
+        {mobileNavOpen && (
+          <div
+            className="landing-mobile-backdrop"
+            onClick={() => setMobileNavOpen(false)}
+            style={{ zIndex: 1000 }}
+          >
+            <div
+              className="landing-mobile-drawer"
+              onClick={(e) => e.stopPropagation()}
+              style={{ padding: "20px 16px" }}
+            >
+              <div className="landing-mobile-drawer-header">
+                <div className="brand-lockup"><Mark size={36} /><div><strong>Co-Labour</strong><span>CO-OP SERVICES</span></div></div>
+                <button type="button" className="landing-mobile-close-btn" onClick={() => setMobileNavOpen(false)} aria-label="Close menu">
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div style={{ padding: "8px 10px", background: "var(--ivory)", borderRadius: 8, fontSize: 11, color: "var(--ink-soft)", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                <span className="live-indicator" /> {roleLabel(role)} · {profile?.societyName ?? "Co-Labour Network"}
+              </div>
+
+              <nav style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
+                {nav.map(({ label, screen: target, icon: Icon, count }) => (
+                  <button
+                    key={label}
+                    onClick={() => { setScreen(target); setMobileNavOpen(false); }}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 10, padding: "11px 14px", borderRadius: 9,
+                      border: 0, background: screen === target ? "var(--sage-soft)" : "transparent",
+                      color: screen === target ? "var(--forest)" : "var(--ink)",
+                      fontSize: 13, fontWeight: screen === target ? 700 : 500, cursor: "pointer", textAlign: "left",
+                    }}
+                  >
+                    <Icon size={16} />
+                    <span>{label}</span>
+                    {count && <b style={{ marginLeft: "auto", background: "var(--forest)", color: "#fff", fontSize: 10, padding: "1px 6px", borderRadius: 99 }}>{count}</b>}
+                  </button>
+                ))}
+                <button
+                  onClick={() => { setScreen("settings"); setMobileNavOpen(false); }}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 10, padding: "11px 14px", borderRadius: 9,
+                    border: 0, background: screen === "settings" ? "var(--sage-soft)" : "transparent",
+                    color: screen === "settings" ? "var(--forest)" : "var(--ink)",
+                    fontSize: 13, fontWeight: screen === "settings" ? 700 : 500, cursor: "pointer", textAlign: "left",
+                  }}
+                >
+                  <Settings2 size={16} /> Settings
+                </button>
+              </nav>
+
+              <div style={{ marginTop: "auto", paddingTop: 14, borderTop: "1px solid var(--border)" }}>
+                <button onClick={() => { setScreen("auth"); setMobileNavOpen(false); }} style={{ display: "flex", alignItems: "center", gap: 9, width: "100%", border: 0, background: "transparent", padding: "8px 10px", borderRadius: 9, cursor: "pointer", textAlign: "left" }}>
+                  <Avatar initials={displayInitials} />
+                  <div><strong style={{ display: "block", fontSize: 12, color: "var(--ink)" }}>{displayName}</strong><small style={{ color: "var(--muted-foreground)", fontSize: 10 }}>{roleLabel(role)}</small></div>
+                </button>
+                <button onClick={handleSignOut} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", border: 0, background: "transparent", color: "var(--danger)", padding: "10px", borderRadius: 9, fontSize: 12, fontWeight: 600, cursor: "pointer", marginTop: 4 }}>
+                  <X size={14} /> Sign out
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div id="main-content" ref={dashboardRef}>{children}</div>
+      </main>
+    </div>
+  );
 }
 
 function ActiveBookingRequestedBadge({ booking }: { booking: DemoBooking }) {

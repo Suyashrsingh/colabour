@@ -19,6 +19,7 @@ import {
   Zap,
 } from "lucide-react";
 import { BrandLockup } from "@/components/BrandMark";
+import LandingHeader from "@/components/LandingHeader";
 import { useDemoStore } from "@/contexts/DemoStoreContext";
 import { initLandingAnimations } from "@/lib/gsapAnimations";
 import "@/landing-page.css";
@@ -318,38 +319,7 @@ export default function LandingPage({
 
   return (
     <div className="sahaay-landing" ref={landingRef}>
-      <header className="landing-header">
-        <a className="landing-brand" href="#top" aria-label="Co-Labour home" onClick={handleAnchor}>
-          <BrandLockup />
-        </a>
-        <nav className={`landing-nav ${menuOpen ? "is-open" : ""}`} aria-label="Landing page navigation">
-          <a href="#services" onClick={handleAnchor}>Find a service</a>
-          <a href="#how-it-works" onClick={handleAnchor}>How it works</a>
-          <a href="#workers" onClick={handleAnchor}>For workers</a>
-          <a href="#cooperatives" onClick={handleAnchor}>For cooperatives</a>
-          <div className="landing-mobile-actions">
-            <button type="button" onClick={() => { handleAnchor(); onSignIn?.(); }}>Sign in</button>
-            <button type="button" className="landing-button landing-button--small" onClick={() => { handleAnchor(); onCreateAccount?.(); }}>
-              Create account <ArrowRight size={14} />
-            </button>
-          </div>
-        </nav>
-        <div className="landing-header-actions">
-          <button type="button" className="landing-text-button" onClick={onSignIn}>Sign in</button>
-          <button type="button" className="landing-button landing-button--small" onClick={onCreateAccount}>
-            Create account <ArrowRight size={14} />
-          </button>
-          <button
-            type="button"
-            className="landing-menu-button"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((current) => !current)}
-          >
-            {menuOpen ? <X size={21} /> : <Menu size={21} />}
-          </button>
-        </div>
-      </header>
+      <LandingHeader currentPath="landing" onSignIn={onSignIn} onCreateAccount={onCreateAccount} />
 
       <main id="top">
         <section className="landing-hero">

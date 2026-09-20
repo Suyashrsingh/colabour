@@ -7,6 +7,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { useDemoStore, isWorkerBusy } from "@/contexts/DemoStoreContext";
 import { BrandLockup } from "@/components/BrandMark";
+import LandingHeader from "@/components/LandingHeader";
 import { MARKETPLACE_CATEGORIES, MARKETPLACE_CITIES, type MarketplaceWorker } from "@/data/marketplaceWorkers";
 import "@/landing-page.css";
 
@@ -247,29 +248,7 @@ export default function MarketplacePage() {
 
   return (
     <div className="sahaay-landing marketplace-root">
-      {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <header className="landing-header">
-        <a href="/" className="landing-brand" aria-label="Co-Labour home">
-          <BrandLockup />
-        </a>
-        <nav className="landing-nav" aria-label="Main navigation">
-          <a href="/#services">Services</a>
-          <a href="/#how-it-works">How it works</a>
-          <a href="/#cooperatives">Cooperatives</a>
-          <a href="/#welfare">Worker welfare</a>
-        </nav>
-        <div className="landing-header-actions">
-          <button onClick={handleSignIn} className="landing-text-button" style={{ fontWeight: 600, fontSize: 12, color: "var(--ink-soft)", padding: "8px 14px", cursor: "pointer" }}>
-            Log in
-          </button>
-          <button
-            onClick={handleSignUp}
-            className="landing-button landing-button--small"
-          >
-            Create account
-          </button>
-        </div>
-      </header>
+      <LandingHeader currentPath="marketplace" onSignIn={handleSignIn} onCreateAccount={handleSignUp} />
 
       {/* ── Hero ────────────────────────────────────────────────────────────── */}
       <section className="marketplace-hero">
