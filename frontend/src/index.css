@@ -17,7 +17,79 @@
 @keyframes fade{from{opacity:0}to{opacity:1}}@keyframes slide{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:no-preference){.page-title,.kpi,.panel,.worker-card{animation:rise .42s var(--ease) both}.kpi:nth-child(2){animation-delay:.04s}.kpi:nth-child(3){animation-delay:.08s}.kpi:nth-child(4){animation-delay:.12s}}
 @media (max-width:1050px){.app-rail{width:210px}.app-main{margin-left:210px;width:calc(100% - 210px)}.worker-grid{grid-template-columns:1fr}.dashboard-grid,.admin-grid,.issues-layout{grid-template-columns:1fr}.booking-row{grid-template-columns:.75fr 1.2fr .6fr .8fr auto}}
-@media (max-width:720px){.product-shell{display:block}.app-rail{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--border);padding:15px 18px}.rail-context,.rail-label,.app-nav,.rail-divider,.rail-settings,.rail-footer{display:none}.app-main{margin-left:0;width:100%}.app-topbar{margin:0 18px;height:63px}.mobile-menu{display:block}.context-line{font-size:10px}.topbar-actions{gap:5px}.command-button,.role-switch span{display:none}.role-switch{padding:4px 7px}.content-wrap{padding:42px 18px 65px}.page-title{display:block;margin-bottom:28px}.page-title>.app-button{margin-top:18px}.page-title h1{font-size:43px}.page-description{font-size:14px}.kpi-grid{grid-template-columns:repeat(2,1fr)}.kpi{min-height:115px;padding:15px}.kpi strong{font-size:24px}.welcome-strip{align-items:flex-start;flex-wrap:wrap}.welcome-strip>.status{margin-left:48px;margin-top:-5px}.dashboard-grid,.admin-grid,.issues-layout{grid-template-columns:1fr}.search-panel{display:block;padding:8px}.search-field{padding:7px 5px 12px}.search-panel select,.search-panel .filter-button{width:100%;margin-top:6px}.results-heading{align-items:flex-start;gap:10px;flex-direction:column}.worker-grid{grid-template-columns:1fr}.worker-card-footer{flex-wrap:wrap}.availability{margin-left:0;order:2}.worker-card-footer .app-button{margin-left:auto}.booking-tabs{gap:14px}.booking-row{grid-template-columns:1fr auto;gap:9px;padding:15px 10px}.booking-row .booking-price{display:none}.booking-row .booking-id{grid-row:span 2}.booking-row .row-chevron{grid-column:2;grid-row:1/3}.booking-row>div:nth-child(4){grid-column:2}.booking-row .status{font-size:9px}.verification-row{flex-wrap:wrap;padding:14px}.verification-row .submitted{margin-left:43px;width:calc(100% - 43px)}.verification-row .app-button{margin-left:43px}.verification-row .reject-button{margin-left:auto}.app-topbar .icon-button{display:none}.detail-drawer{padding:24px}.booking-modal{padding:24px}.modal-detail-grid{gap:13px}.panel-head,.table-header{padding:18px}.request-row,.admin-row,.activity-line,.issue-row,.settings-row{padding:14px 18px}}
+@media (max-width:720px){
+  .product-shell{display:block}
+  .app-rail{display:none !important}
+  .app-main{margin-left:0;width:100%;min-width:0;overflow-x:hidden}
+  .app-topbar{position:sticky;top:0;z-index:40;margin:0;height:56px;padding:0 14px;background:rgba(245,241,234,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .mobile-menu{display:flex !important;align-items:center;justify-content:center}
+  .topbar-brand{display:flex !important;align-items:center;gap:8px}
+  .topbar-brand strong,.topbar-brand span{display:none !important}
+  .context-line{font-size:10px}
+  .topbar-actions{gap:5px}
+  .command-button,.role-switch span{display:none}
+  .role-switch{padding:4px 7px}
+  .content-wrap{padding:18px 14px 50px;max-width:100%;box-sizing:border-box}
+  .page-title{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-bottom:20px}
+  .page-title>.app-button,.page-title>div{width:100%;margin-top:4px}
+  .page-title .app-button{justify-content:center}
+  .page-title h1{font-size:clamp(22px,6vw,32px) !important;line-height:1.2;margin:0;word-break:break-word}
+  .page-description{font-size:12.5px;line-height:1.45}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+  .kpi{min-height:90px;padding:12px 14px}
+  .kpi strong{font-size:clamp(18px,4.5vw,24px)}
+  .kpi small{font-size:10px;line-height:1.3}
+  .welcome-strip{align-items:flex-start;flex-wrap:wrap}
+  .welcome-strip>.status{margin-left:48px;margin-top:-5px}
+  .dashboard-grid,.admin-grid,.issues-layout{grid-template-columns:1fr;gap:14px}
+  .search-panel{display:block;padding:10px}
+  .search-field{padding:7px 5px 12px}
+  .search-panel select,.search-panel .filter-button{width:100%;margin-top:6px}
+  .results-heading{align-items:flex-start;gap:10px;flex-direction:column}
+  .worker-grid{grid-template-columns:1fr}
+  .worker-card-footer{flex-wrap:wrap;gap:8px}
+  .availability{margin-left:0;order:2}
+  .worker-card-footer .app-button{margin-left:auto}
+  .booking-tabs{gap:12px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .booking-tabs::-webkit-scrollbar{display:none}
+  .booking-feature{padding:16px 14px;border-radius:12px}
+  .booking-worker{flex-wrap:wrap;gap:8px}
+  .booking-meta{flex-wrap:wrap;gap:12px;padding:14px 0 12px;font-size:11px}
+  .progress-labels{display:flex;justify-content:space-between;gap:2px;margin-top:6px}
+  .progress-labels span{font-size:clamp(8px,2.2vw,10px);text-align:center;white-space:nowrap;flex:1}
+  .booking-row{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px 16px;position:relative;text-align:left;width:100%;box-sizing:border-box}
+  .booking-row .row-chevron{position:absolute;right:14px;top:14px;color:var(--muted-foreground)}
+  .booking-row .booking-id{display:flex;align-items:center;gap:8px;font-size:11px}
+  .booking-row .booking-person{display:flex;align-items:center;gap:10px}
+  .booking-row .booking-price{display:flex !important;align-items:center;justify-content:space-between;border-top:1px dashed var(--border);padding-top:8px;margin-top:2px}
+  .booking-row .booking-price strong{font-size:14px;color:var(--forest-dark)}
+  .worker-payment-notification{flex-wrap:wrap;gap:8px;padding:12px 14px}
+  .worker-status-bar{flex-direction:column;align-items:stretch;gap:10px;padding:12px 14px}
+  .worker-active-job-banner{flex-direction:column;align-items:stretch;gap:14px;padding:16px 14px}
+  .worker-active-job-info{width:100%;min-width:0}
+  .worker-active-job-actions{flex-direction:column;align-items:stretch;width:100%;gap:8px}
+  .worker-active-job-actions .app-button,.worker-active-job-actions .status{width:100%;justify-content:center;text-align:center}
+  .admin-executive-strip{flex-direction:column;align-items:stretch;gap:10px;padding:12px 14px}
+  .admin-executive-notice{width:100%;min-width:0;justify-content:flex-start;border-top:1px solid var(--border);padding-top:8px}
+  .admin-workspace-tabs{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .admin-workspace-tabs::-webkit-scrollbar{display:none}
+  .verification-row{flex-direction:column;align-items:stretch;gap:10px;padding:12px 14px}
+  .verification-row .submitted{margin-left:0;width:100%}
+  .verification-row .app-button,.verification-row .reject-button{flex:1;justify-content:center;margin-left:0}
+  .society-audit-grid{grid-template-columns:1fr;gap:14px}
+  .audit-card{padding:14px;width:100%;box-sizing:border-box}
+  .audit-card-meta-grid{grid-template-columns:1fr;gap:10px;padding:10px}
+  .audit-card-meta-grid>div:nth-child(2){border-left:0 !important;border-top:1px solid var(--border);padding-left:0 !important;padding-top:8px}
+  .audit-card-actions{flex-direction:column;align-items:stretch;width:100%;gap:8px}
+  .audit-card-actions .app-button,.audit-card-actions .reject-button{width:100%;justify-content:center;text-align:center}
+  .audit-gate-screen{max-width:100%;margin:12px auto;padding:16px 14px;border-radius:10px}
+  .app-topbar .icon-button{display:none}
+  .detail-drawer{padding:20px;width:100%}
+  .booking-modal{padding:20px;width:calc(100% - 20px);max-height:calc(100vh - 40px)}
+  .modal-detail-grid{gap:12px;padding:14px 0;margin:16px 0}
+  .panel-head,.table-header{padding:14px 16px}
+  .request-row,.admin-row,.activity-line,.issue-row,.settings-row{padding:12px 14px}
+}
 
 /* Booking / trust flow additions: keep the executive forest-teal hierarchy and make every next action explicit. */
 .modal-intro{color:var(--muted-foreground);font-size:12px;line-height:1.55;margin:0 0 16px}.booking-form-worker{padding:12px 0 17px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:17px}.booking-form-worker>div:nth-child(2){flex:1}.booking-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px}.booking-form-grid label,.booking-description{display:block;color:var(--muted-foreground);font-size:10px}.booking-form-grid select{display:block;width:100%;margin-top:6px;border:1px solid var(--border);background:var(--ivory);border-radius:9px;padding:10px;color:var(--ink);font-size:11px;outline:0}.booking-description textarea{display:block;width:100%;margin-top:6px;border:1px solid var(--border);background:var(--ivory);border-radius:9px;padding:10px;color:var(--ink);font-size:11px;outline:0;resize:vertical}.emergency-toggle{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:11px;padding:12px;margin-top:13px;background:#fbfaf6}.emergency-toggle.selected{background:var(--danger-soft);border-color:rgba(168,92,77,.25)}.emergency-toggle>div{flex:1}.emergency-toggle strong,.emergency-toggle small{display:flex;align-items:center;gap:5px}.emergency-toggle strong{font-size:11px}.emergency-toggle strong svg{color:var(--danger)}.emergency-toggle small{color:var(--muted-foreground);font-size:9px;margin-top:4px;line-height:1.45}.emergency-toggle>button{border:0;background:#d8ddd7;border-radius:999px;width:36px;height:20px;padding:2px;position:relative}.emergency-toggle>button span{display:block;width:16px;height:16px;border-radius:50%;background:#fff;transition:.18s var(--ease)}.emergency-toggle.selected>button{background:var(--danger)}.emergency-toggle.selected>button span{transform:translateX(16px)}.estimate-card{display:flex;align-items:center;justify-content:space-between;background:var(--teal-soft);border-radius:11px;padding:13px;margin:13px 0 16px}.estimate-card small,.estimate-card strong{display:block}.estimate-card small{color:#668078;font-size:9px}.estimate-card strong{font:600 22px "Manrope", sans-serif;margin-top:3px}.estimate-card>span{font-size:10px;color:var(--forest);background:rgba(255,253,248,.6);border-radius:999px;padding:6px 8px}.booking-modal>.app-button{width:100%;justify-content:center}.modal-title-row{display:flex;justify-content:space-between;align-items:center;gap:15px}.modal-title-row h2{margin-bottom:5px}.modal-title-row p{color:var(--muted-foreground);font-size:11px;margin:0}.emergency-banner{display:flex;align-items:flex-start;gap:8px;background:var(--danger-soft);border-radius:10px;padding:11px;margin-top:17px;color:var(--danger)}.emergency-banner span{display:block}.emergency-banner strong,.emergency-banner small{display:block}.emergency-banner strong{font-size:11px;color:var(--ink)}.emergency-banner small{font-size:10px;margin-top:3px}.receipt-card{background:var(--sage-soft);border-radius:11px;padding:13px;display:grid;grid-template-columns:auto 1fr;gap:9px;color:#5f896b}.receipt-check{width:31px;height:31px;border-radius:50%;background:var(--paper);display:grid;place-items:center}.receipt-card>div:nth-child(2) strong,.receipt-card>div:nth-child(2) small{display:block}.receipt-card>div:nth-child(2) strong{font:600 12px "Manrope", sans-serif;color:var(--ink)}.receipt-card>div:nth-child(2) small{font-size:9px;margin-top:3px}.rating-block{grid-column:1/-1;border-top:1px solid rgba(95,137,107,.17);padding-top:11px;margin-top:4px}.rating-block>span{display:block;font-size:10px;color:var(--ink-soft);margin-bottom:6px}.star{border:0;background:transparent;color:#c8c9bd;padding:1px}.star.selected{color:var(--brass)}.rating-block .app-button{margin-top:9px;padding:8px 11px;font-size:10px}.booking-form-modal{max-height:calc(100vh - 30px);overflow:auto}
@@ -518,8 +590,17 @@ button:focus-visible,a:focus-visible{outline:2.5px solid var(--forest);outline-o
   }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 380px) {
   .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .search-panel {
+    padding: 8px;
+  }
+  .society-docs-grid {
+    grid-template-columns: 1fr;
+  }
+  .dossier-grid {
     grid-template-columns: 1fr;
   }
 }

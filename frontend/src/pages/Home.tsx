@@ -55,8 +55,24 @@ function Skeleton({ cls }: { cls: string }) { return <span className={`skeleton 
 function SkeletonKpiGrid() { return <div className="kpi-grid" aria-busy="true" aria-label="Loading statistics">{[0,1,2,3].map((i) => <Skeleton key={i} cls="skeleton-kpi" />)}</div>; }
 function SkeletonWorkerGrid() { return <div className="worker-grid" aria-busy="true" aria-label="Loading workers">{[0,1,2].map((i) => <Skeleton key={i} cls="skeleton-card" />)}</div>; }
 function SkeletonBookingList() { return <div className="booking-list" aria-busy="true" aria-label="Loading bookings">{[0,1,2].map((i) => <Skeleton key={i} cls="skeleton-row" />)}</div>; }
-function Mark({ size = 48 }: { size?: number }) { return <img src="/co-labour-logo.svg" alt="Co-Labour" width={size} height={size} style={{display:'block',flexShrink:0,minWidth:size}} />; }
 function Avatar({ initials, tone = "forest" }: { initials: string; tone?: string }) { return <div className={`avatar avatar-${tone}`}>{initials}</div>; }
+function Mark({ size, height = 36 }: { size?: number; height?: number }) {
+  const h = height || size || 36;
+  return (
+    <img
+      src="/colabour-logo.png"
+      alt="Co-Labour"
+      style={{
+        display: "block",
+        flexShrink: 0,
+        height: `${h}px`,
+        width: "auto",
+        maxWidth: "100%",
+        objectFit: "contain",
+      }}
+    />
+  );
+}
 function Status({ value }: { value: string }) {
   const tone = value === "Completed" || value === "Verified" || value === "Available today" ? "good" : value === "Emergency" || value === "Rejected" ? "urgent" : value === "Requested" || value === "Pending verification" ? "pending" : "info";
   return <span className={`status status-${tone}`}><i />{value}</span>;
@@ -228,7 +244,7 @@ function AppShell({ role, setRole, screen, setScreen, children }: { role: Role; 
     <div className="product-shell">
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <aside className="app-rail" role="navigation" aria-label="Primary navigation">
-        <div className="brand-lockup"><Mark size={52} /><div><strong>Co-Labour</strong><span>CO-OP SERVICES</span></div></div>
+        <div className="brand-lockup"><Mark height={38} /></div>
         <div className="rail-context"><span className="live-indicator" /> {role === "Admin" ? "Cooperative Admin" : role === "Worker" ? "Worker" : role === "Official" ? "State RCS Official" : "Customer"} <span style={{opacity:0.4,margin:'0 4px'}}>·</span> {profile?.societyName ?? (role === "Official" ? "State Dept of Cooperatives" : "Co-Labour Network")}</div>
         <p className="rail-label">{role === "Admin" ? "COOPERATIVE DESK" : role === "Worker" ? "WORKER DESK" : role === "Official" ? "STATE REGULATORY DESK" : "SERVICE DESK"}</p>
         <nav className="app-nav">
@@ -265,8 +281,8 @@ function AppShell({ role, setRole, screen, setScreen, children }: { role: Role; 
           >
             {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <div className="topbar-brand">
-            <Mark size={40} /><strong>Co-Labour</strong><span>co-op services</span>
+          <div className="topbar-brand" style={{ display: "flex", alignItems: "center" }}>
+            <Mark height={30} />
           </div>
           <div className="topbar-center">
             {role === "Official" ? (
@@ -299,7 +315,7 @@ function AppShell({ role, setRole, screen, setScreen, children }: { role: Role; 
               style={{ padding: "20px 16px" }}
             >
               <div className="landing-mobile-drawer-header">
-                <div className="brand-lockup"><Mark size={36} /><div><strong>Co-Labour</strong><span>CO-OP SERVICES</span></div></div>
+                <div className="brand-lockup"><Mark height={34} /></div>
                 <button type="button" className="landing-mobile-close-btn" onClick={() => setMobileNavOpen(false)} aria-label="Close menu">
                   <X size={18} />
                 </button>
@@ -891,7 +907,7 @@ function WorkerDashboard({ go, bookingItems }: { go: (screen: Screen) => void; b
       )}
 
       {/* Consolidated Worker Status Bar: Emergency Fund, Pending Settlement & Admin Privacy */}
-      <div style={{ background: "var(--paper)", border: "1px solid var(--border)", borderRadius: 10, padding: "10px 16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+      <div className="worker-status-bar" style={{ background: "var(--paper)", border: "1px solid var(--border)", borderRadius: 10, padding: "10px 16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <ShieldCheck size={18} style={{ color: "var(--forest)", flexShrink: 0 }} />
@@ -962,15 +978,15 @@ function WorkerDashboard({ go, bookingItems }: { go: (screen: Screen) => void; b
       </div>
 
       {_activeJob && (
-        <div style={{ background: 'var(--paper)', border: '1px solid var(--forest)', borderRadius: 14, padding: '16px 20px', marginBottom: 18, boxShadow: 'var(--shadow)', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1 }}>
+        <div className="worker-active-job-banner" style={{ background: 'var(--paper)', border: '1px solid var(--forest)', borderRadius: 14, padding: '16px 20px', marginBottom: 18, boxShadow: 'var(--shadow)', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+          <div className="worker-active-job-info" style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 220 }}>
             <Avatar initials={_activeJob.customerName ? _activeJob.customerName.split(" ").map((x: string) => x[0]).join("").substring(0, 2).toUpperCase() : "CU"} tone="forest" />
             <div>
               <strong style={{ fontSize: 14, display: 'block' }}>Active Job in Motion · {_activeJob.customerName ?? "Customer"}</strong>
               <small style={{ color: 'var(--muted-foreground)', fontSize: 11 }}>{_activeJob.service} · {_activeJob.date} · {_activeJob.amount}</small>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="worker-active-job-actions" style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             <Status value={_activeJob.status} />
             {_activeJob.status === "Accepted" && <Button onClick={() => updateBooking(_activeJob.id, "En Route")} icon={<Zap size={14} />}>Start journey (En Route)</Button>}
             {_activeJob.status === "En Route" && <Button onClick={() => updateBooking(_activeJob.id, "In Progress")} icon={<Clock3 size={14} />}>Arrive &amp; Begin</Button>}
@@ -2383,7 +2399,7 @@ function OfficialDashboard({ go }: { go: (screen: Screen) => void }) {
                   <span className="audit-doc-chip">✓ Bank Mandate</span>
                 </div>
 
-                <div style={{ display: "flex", gap: 8, alignItems: "center", borderTop: "1px solid var(--border)", paddingTop: 12 }}>
+                <div className="audit-card-actions" style={{ display: "flex", gap: 8, alignItems: "center", borderTop: "1px solid var(--border)", paddingTop: 12, flexWrap: "wrap" }}>
                   <Button
                     variant="secondary"
                     onClick={() => setSelectedAuditSociety(soc)}
@@ -3649,7 +3665,7 @@ function AdminOverview({
       />
 
       {/* Consolidated Executive Header Strip: Society ID & Operational Notice */}
-      <div style={{ background: "var(--paper)", border: "1px solid var(--border)", borderRadius: 10, padding: "10px 16px", marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+      <div className="admin-executive-strip" style={{ background: "var(--paper)", border: "1px solid var(--border)", borderRadius: 10, padding: "10px 16px", marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <ShieldCheck size={18} style={{ color: "var(--forest)", flexShrink: 0 }} />
           <span style={{ fontSize: 12, fontWeight: 700, color: "var(--forest-dark)" }}>
@@ -3667,7 +3683,7 @@ function AdminOverview({
             <Copy size={12} /> Copy
           </button>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, justifyContent: "flex-end", minWidth: 260 }}>
+        <div className="admin-executive-notice" style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, justifyContent: "flex-end", minWidth: 260 }}>
           {isEditingNotice ? (
             <div style={{ display: "flex", gap: 6, width: "100%", maxWidth: 450 }}>
               <input
@@ -6279,7 +6295,7 @@ function PaymentGateway({ booking, onComplete }: { booking: DemoBooking; onCompl
         name: "Co-Labour (Sahaay)",
         description: `Settlement for ${booking.service} by ${booking.worker}`,
         order_id: orderData.order_id,
-        image: "/co-labour-logo.svg",
+        image: "/colabour-logo.png",
         handler: async function (response: {
           razorpay_order_id: string;
           razorpay_payment_id: string;

@@ -2,30 +2,50 @@ import React from "react";
 
 /**
  * Co-Labour brand identity primitive.
- * Uses the SVG logo mark with the approved symbol:
- * forest-green orbit ring, central home, two people, brass doorway, sage bell.
+ * Uses the official CoLabour emblem and wordmark logo.
  */
-export function BrandMark({ label = "Co-Labour mark", size = 52 }: { label?: string; size?: number }) {
+export function BrandMark({
+  label = "Co-Labour — Cooperative Digital Service Marketplace",
+  size,
+  height,
+  className = "",
+}: {
+  label?: string;
+  size?: number;
+  height?: number;
+  className?: string;
+}) {
+  const h = height || size || 40;
   return (
     <img
-      src="/co-labour-logo.svg"
+      src="/colabour-logo.png"
       alt={label}
-      width={size}
-      height={size}
-      style={{ display: "block", flexShrink: 0, minWidth: size }}
+      height={h}
+      className={className}
+      style={{
+        display: "block",
+        flexShrink: 0,
+        height: `${h}px`,
+        width: "auto",
+        maxWidth: "100%",
+        objectFit: "contain",
+      }}
       aria-label={label}
     />
   );
 }
 
-export function BrandLockup() {
+export function BrandLockup({
+  height = 40,
+  className = "",
+}: {
+  height?: number;
+  className?: string;
+}) {
   return (
-    <div className="brand-lockup">
-      <BrandMark />
-      <div>
-        <strong>Co-Labour</strong>
-        <span>CO-OP SERVICES</span>
-      </div>
+    <div className={`brand-lockup ${className}`} style={{ alignItems: "center" }}>
+      <BrandMark height={height} />
     </div>
   );
 }
+
