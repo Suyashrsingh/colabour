@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { BrandLockup } from "@/components/BrandMark";
 import LandingHeader from "@/components/LandingHeader";
+import { LandingTrackingShowcase } from "@/components/LandingTrackingShowcase";
 import { useDemoStore } from "@/contexts/DemoStoreContext";
 import { initLandingAnimations } from "@/lib/gsapAnimations";
 import "@/landing-page.css";
@@ -500,6 +501,8 @@ export default function LandingPage({
             <span className="live-pulsing-dot" style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "var(--forest)", boxShadow: "0 0 0 4px rgba(23, 107, 98, 0.2)", flexShrink: 0 }} />
             <span><strong>Live GPS Tracking Enabled:</strong> Customers and workers can now track en-route services in real-time on an interactive map with dynamic arrival ETAs.</span>
           </div>
+
+          <LandingTrackingShowcase />
         </section>
 
         <section className="landing-network-section" id="workers">
