@@ -281,7 +281,7 @@ function AppShell({ role, setRole, screen, setScreen, children }: { role: Role; 
           >
             {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <div className="topbar-brand" style={{ display: "flex", alignItems: "center" }}>
+          <div className="topbar-brand">
             <Mark height={30} />
           </div>
           <div className="topbar-center">
