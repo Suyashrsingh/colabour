@@ -117,10 +117,10 @@ export function LiveTrackingMap({
 
       mapInstanceRef.current = map;
 
-      // 2. Add high-resolution, light CartoDB Voyager tiles (100% Free & OpenStreetMap data)
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+      // 2. Add Standard OpenStreetMap tiles (100% Free, zero API key)
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
-        subdomains: "abcd",
+        subdomains: ["a", "b", "c"],
       }).addTo(map);
 
       // Custom Zoom control at top-right
