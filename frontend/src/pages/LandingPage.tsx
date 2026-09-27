@@ -407,7 +407,7 @@ export default function LandingPage({
               </div>
               <div className="landing-search-helper">
                 <ShieldCheck size={14} />
-                <span>Verified cooperative workers <i /> Fixed estimates before booking <i /> Locality matching for the MVP</span>
+                <span>Verified cooperative workers <i /> Fixed estimates before booking <i /> Live GPS route tracking</span>
               </div>
               {searchMessage && <p className="landing-search-message" role="status">{searchMessage}</p>}
             </div>
@@ -497,8 +497,8 @@ export default function LandingPage({
             ))}
           </div>
           <div className="landing-honesty-note">
-            <MapPin size={16} />
-            <span>Locality matching is a plain-text MVP experience today—not live GPS-radius matching.</span>
+            <span className="live-pulsing-dot" style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "var(--forest)", boxShadow: "0 0 0 4px rgba(23, 107, 98, 0.2)", flexShrink: 0 }} />
+            <span><strong>Live GPS Tracking Enabled:</strong> Customers and workers can now track en-route services in real-time on an interactive map with dynamic arrival ETAs.</span>
           </div>
         </section>
 
