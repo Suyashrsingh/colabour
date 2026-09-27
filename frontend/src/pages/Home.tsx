@@ -8,6 +8,7 @@ import { uploadSocietyDocument } from "@/lib/supabase";
 import { animateDashboardReveal } from "@/lib/gsapAnimations";
 import { LineChart, Line, ResponsiveContainer, YAxis } from "recharts";
 import { MARKETPLACE_CATEGORIES } from "@/data/marketplaceWorkers";
+import { LiveTrackingMap } from "@/components/LiveTrackingMap";
 
 function exportBookingsCsv(bookingsList: DemoBooking[]) {
   const headers = ["Booking ID", "Customer", "Worker", "Service", "Date", "Status", "Amount", "Emergency", "Payment Status", "Payment Method", "Tx Ref"];
@@ -471,6 +472,19 @@ function Overview({ role, go, bookingItems, openBooking, onReview }: { role: Rol
               <div className="progress-labels">
                 {stages.map((stage) => <span key={stage}>{stage === "Completed" ? "Done" : stage}</span>)}
               </div>
+
+              {/* Swiggy/Zomato Style Live GPS Map Tracking */}
+              {(activeBooking.status === "Accepted" || activeBooking.status === "En Route" || activeBooking.status === "In Progress") && (
+                <LiveTrackingMap
+                  bookingId={activeBooking.id}
+                  workerName={activeBooking.worker}
+                  customerName={profile?.fullName || "You"}
+                  service={activeBooking.service}
+                  status={activeBooking.status}
+                  area={activeBooking.area || "Gurugram"}
+                  isWorkerPerspective={false}
+                />
+              )}
             </div>
           ) : (
             <div className="empty-state">
@@ -992,6 +1006,20 @@ function WorkerDashboard({ go, bookingItems }: { go: (screen: Screen) => void; b
             {_activeJob.status === "En Route" && <Button onClick={() => updateBooking(_activeJob.id, "In Progress")} icon={<Clock3 size={14} />}>Arrive &amp; Begin</Button>}
             {_activeJob.status === "In Progress" && <Button onClick={() => updateBooking(_activeJob.id, "Completed")} icon={<Check size={14} />}>Mark Completed</Button>}
             {(_activeJob.status === "Accepted" || _activeJob.status === "En Route") && <Button variant="secondary" onClick={() => updateBooking(_activeJob.id, "Cancelled", { cancelFeeApplied: false, cancelReason: "Worker Emergency / Vehicle Breakdown (Safe handoff)" })}>Can&apos;t make it (Emergency)</Button>}
+          </div>
+
+          {/* Swiggy/Zomato Style Live Route & Navigation for Tradesperson */}
+          <div style={{ width: "100%", marginTop: 6 }}>
+            <LiveTrackingMap
+              bookingId={_activeJob.id}
+              workerName={workerDisplayName}
+              customerName={_activeJob.customerName || "Customer"}
+              service={_activeJob.service}
+              status={_activeJob.status}
+              area={_activeJob.area || "Gurugram"}
+              isWorkerPerspective={true}
+              onUpdateStatus={(newStatus) => updateBooking(_activeJob.id, newStatus as any)}
+            />
           </div>
         </div>
       )}
@@ -7054,6 +7082,22 @@ function BookingDetailModal({
           <div className="progress-rail">{stages.map((stage, i) => <span key={stage} className={i < current ? "done" : i === current ? "current" : ""} />)}</div>
           <div className="progress-labels">{stages.map((stage) => <span key={stage}>{stage}</span>)}</div>
         </div>
+
+        {/* Live Map Route inside Modal */}
+        {(booking.status === "Accepted" || booking.status === "En Route" || booking.status === "In Progress") && (
+          <div style={{ margin: "14px 0" }}>
+            <LiveTrackingMap
+              bookingId={booking.id}
+              workerName={booking.worker}
+              customerName={booking.customerName || "Customer"}
+              service={booking.service}
+              status={booking.status}
+              area={booking.area || "Gurugram"}
+              isWorkerPerspective={role === "Worker"}
+              onUpdateStatus={role === "Worker" ? (newStatus) => advance(newStatus) : undefined}
+            />
+          </div>
+        )}
 
         {/* Worker Actions */}
         {role === "Worker" && booking.status === "Requested" && (

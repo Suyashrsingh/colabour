@@ -43,6 +43,7 @@ export type DemoBooking = {
   workerAcceptDeadline?: number;
   cancelFeeApplied?: boolean;
   cancelReason?: string;
+  area?: string;
 };
 
 export type DemoIssue = {

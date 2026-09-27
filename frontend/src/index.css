@@ -174,6 +174,43 @@ button:focus-visible,a:focus-visible{outline:2.5px solid var(--forest);outline-o
 .pulse-radar{display:inline-flex;align-items:center;gap:6px;background:var(--teal-soft);color:var(--forest);border-radius:999px;padding:4px 10px;font-size:10px;font-weight:600}
 .pulse-radar i{width:8px;height:8px;border-radius:50%;background:var(--forest);box-shadow:0 0 0 0 rgba(23,107,98,.6);animation:radar-pulse 1.8s infinite}
 @keyframes radar-pulse{0%{transform:scale(.95);box-shadow:0 0 0 0 rgba(23,107,98,.7)}70%{transform:scale(1);box-shadow:0 0 0 8px rgba(23,107,98,0)}100%{transform:scale(.95);box-shadow:0 0 0 0 rgba(23,107,98,0)}}
+
+/* ── Swiggy/Zomato Style Live GPS Tracking Map ─────────────────────────── */
+.live-tracking-card{background:var(--paper);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(23,107,98,.06);margin-top:14px;margin-bottom:16px}
+.tracking-top-strip{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--paper);border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
+.tracking-live-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--forest)}
+.live-pulsing-dot{width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 0 0 rgba(16,185,129,.7);animation:pulse-dot 1.8s infinite}
+@keyframes pulse-dot{0%{transform:scale(.95);box-shadow:0 0 0 0 rgba(16,185,129,.8)}70%{transform:scale(1);box-shadow:0 0 0 7px rgba(16,185,129,0)}100%{transform:scale(.95);box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+.tracking-eta-pill{display:inline-flex;align-items:center;gap:6px;background:var(--teal-soft);color:var(--forest-dark);border:1px solid rgba(23,107,98,.2);padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600}
+.tracking-controls{display:flex;align-items:center;gap:5px}
+.tracking-icon-btn{border:1px solid var(--border);background:var(--ivory);color:var(--ink);width:28px;height:28px;border-radius:7px;display:grid;place-items:center;cursor:pointer;transition:all .15s ease}
+.tracking-icon-btn:hover{background:var(--paper);border-color:var(--forest)}
+.tracking-map-viewport{width:100%;position:relative;background:#f4f3ef;transition:height .25s var(--ease);z-index:1}
+.custom-leaflet-marker{background:transparent !important;border:none !important}
+.tracking-home-pin{position:relative;display:flex;flex-direction:column;align-items:center}
+.pin-badge-home{width:32px;height:32px;border-radius:50%;background:var(--forest);color:#fff;display:grid;place-items:center;box-shadow:0 3px 10px rgba(23,107,98,.35);border:2.5px solid #fff;z-index:2}
+.pin-pulse-halo{position:absolute;top:-4px;left:0;width:40px;height:40px;border-radius:50%;background:rgba(23,107,98,.2);animation:pulse-dot 2s infinite ease-out;z-index:1}
+.tracking-worker-pin{position:relative;display:flex;flex-direction:column;align-items:center}
+.pin-badge-worker{width:34px;height:34px;border-radius:50%;background:#d97706;color:#fff;display:grid;place-items:center;box-shadow:0 4px 14px rgba(217,119,6,.4);border:2.5px solid #fff;z-index:2;animation:bounce-subtle 2s infinite ease-in-out}
+@keyframes bounce-subtle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.worker-radar-ring{position:absolute;top:-6px;left:-1px;width:46px;height:46px;border-radius:50%;background:rgba(217,119,6,.22);animation:radar-pulse 1.8s infinite;z-index:1}
+.pin-label-callout{position:absolute;top:36px;white-space:nowrap;background:rgba(30,40,35,.88);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;box-shadow:0 2px 8px rgba(0,0,0,.15);pointer-events:none}
+.pin-label-callout.worker{background:#92400e}
+.tracking-bottom-tray{padding:12px 14px;background:var(--paper);border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px}
+.tray-worker-meta{display:flex;align-items:center;gap:10px}
+.tray-avatar{width:36px;height:36px;border-radius:50%;background:var(--forest);color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px;flex-shrink:0}
+.coop-badge-tag{display:inline-flex;align-items:center;gap:4px;background:var(--teal-soft);color:var(--forest);border:1px solid rgba(23,107,98,.2);padding:2px 6px;border-radius:999px;font-size:9.5px;font-weight:700}
+.tray-trip-steps{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--ivory);border-radius:8px;border:1px solid var(--border);font-size:11px}
+.trip-step{display:flex;align-items:center;gap:6px;color:var(--muted-foreground);font-weight:500}
+.trip-step.active{color:var(--forest-dark);font-weight:700}
+.trip-step.done{color:var(--forest)}
+.step-circle{width:18px;height:18px;border-radius:50%;background:var(--border);color:var(--ink);display:grid;place-items:center;font-size:9.5px;font-weight:700}
+.trip-step.active .step-circle{background:var(--forest);color:#fff}
+.trip-step.done .step-circle{background:var(--forest);color:#fff}
+.trip-step-line{flex:1;height:2px;background:var(--border);margin:0 8px}
+.safety-trust-chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:var(--forest-dark)}
+@media (max-width: 600px){.tracking-top-strip{flex-direction:column;align-items:flex-start;gap:8px}.tracking-controls{align-self:flex-end;margin-top:-26px}}
+
 .grievance-tabs{display:flex;gap:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
 .grievance-tabs button{border:0;background:transparent;color:var(--muted-foreground);font-size:12px;padding:0 0 10px;border-bottom:2px solid transparent;cursor:pointer}
 .grievance-tabs button.active{color:var(--ink);font-weight:600;border-bottom-color:var(--forest)}
