@@ -232,11 +232,36 @@ const trustPoints = [
 ] as const;
 
 const workflow = [
-  ["01", "Search", "Choose a service and share your locality."],
-  ["02", "Trust", "Compare verified profiles, experience, availability, and rating."],
-  ["03", "Book", "See the fixed rate-card estimate before you confirm."],
-  ["04", "Track", "Follow Requested, Accepted, En Route, In Progress, and Completed."],
-  ["05", "Close the loop", "Pay in simulation for the demo, receive an on-screen receipt, and rate the worker."],
+  {
+    number: "01",
+    title: "Search",
+    copy: "Choose a service and share your locality.",
+    icon: Search,
+  },
+  {
+    number: "02",
+    title: "Trust",
+    copy: "Compare verified profiles, experience, availability, and rating.",
+    icon: ShieldCheck,
+  },
+  {
+    number: "03",
+    title: "Book",
+    copy: "See the fixed rate-card estimate before you confirm.",
+    icon: BriefcaseBusiness,
+  },
+  {
+    number: "04",
+    title: "Track",
+    copy: "Follow Requested, Accepted, En Route, In Progress, and Completed on a live map.",
+    icon: MapPin,
+  },
+  {
+    number: "05",
+    title: "Close the loop",
+    copy: "Pay in simulation for the demo, receive an on-screen receipt, and rate the worker.",
+    icon: Handshake,
+  },
 ] as const;
 
 function LandingSectionLabel({ children }: { children: ReactNode }) {
@@ -456,14 +481,25 @@ export default function LandingPage({
             <p>Co-Labour keeps the important details visible from the first search to the finished job.</p>
           </div>
           <div className="landing-workflow-track">
-            {workflow.map(([number, title, copy]) => (
+            {workflow.map(({ number, title, copy, icon: StepIcon }) => (
               <article key={number} className="landing-workflow-step">
-                <span>{number}</span>
-                <div><h3>{title}</h3><p>{copy}</p></div>
+                <div className="landing-workflow-step-marker">
+                  <span className="landing-workflow-step-number">{number}</span>
+                  <div className="landing-workflow-step-icon">
+                    <StepIcon size={14} strokeWidth={2.2} />
+                  </div>
+                </div>
+                <div className="landing-workflow-step-body">
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                </div>
               </article>
             ))}
           </div>
-          <div className="landing-honesty-note"><MapPin size={16} /><span>Locality matching is a plain-text MVP experience today—not live GPS-radius matching.</span></div>
+          <div className="landing-honesty-note">
+            <MapPin size={16} />
+            <span>Locality matching is a plain-text MVP experience today—not live GPS-radius matching.</span>
+          </div>
         </section>
 
         <section className="landing-network-section" id="workers">

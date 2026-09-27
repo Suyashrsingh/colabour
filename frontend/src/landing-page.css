@@ -690,66 +690,105 @@
 .landing-workflow-track {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
   max-width: var(--landing-max);
-  margin: 53px auto 0;
-  border-top: 1px solid rgba(23, 107, 98, .23)
+  margin: 48px auto 0;
+  position: relative;
 }
 
 .landing-workflow-step {
   position: relative;
-  min-height: 190px;
-  padding: 23px 18px 0 0;
-  border-right: 1px solid rgba(23, 107, 98, .2)
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 22px 18px;
+  border-radius: 18px;
+  background: var(--paper);
+  border: 1px solid rgba(23, 107, 98, 0.15);
+  box-shadow: 0 4px 16px rgba(23, 107, 98, 0.04);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), border-color 0.2s var(--ease);
 }
 
-.landing-workflow-step:not(:first-child) {
-  padding-left: 18px
+.landing-workflow-step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(23, 107, 98, 0.09);
+  border-color: rgba(23, 107, 98, 0.32);
 }
 
-.landing-workflow-step:not(:last-child) {
-  margin-right: 18px
+.landing-workflow-step-marker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.landing-workflow-step>span {
-  display: grid;
-  place-items: center;
-  width: 33px;
-  height: 33px;
-  margin-top: -40px;
-  margin-bottom: 26px;
+.landing-workflow-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--forest);
   color: var(--paper);
-  font: 600 10px "Manrope", sans-serif, inherit
+  font: 700 11px "Manrope", sans-serif, inherit;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(23, 107, 98, 0.25);
 }
 
-.landing-workflow-step h3 {
-  margin: 0 0 7px;
-  font: 600 17px "Manrope", sans-serif, inherit
+.landing-workflow-step-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: var(--sage-soft);
+  color: var(--forest);
+  flex-shrink: 0;
 }
 
-.landing-workflow-step p {
-  max-width: 200px;
+.landing-workflow-step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.landing-workflow-step-body h3 {
   margin: 0;
-  color: #5e746d;
-  font-size: 11px;
-  line-height: 1.55
+  font: 600 16px/1.3 "Manrope", sans-serif, inherit;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.landing-workflow-step-body p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.55;
 }
 
 .landing-honesty-note {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   max-width: var(--landing-max);
-  margin: 26px auto 0;
-  padding-top: 17px;
-  border-top: 1px solid rgba(23, 107, 98, .2);
-  color: #5e746d;
-  font-size: 11px
+  margin: 32px auto 0;
+  padding: 14px 18px;
+  background: rgba(255, 253, 248, 0.7);
+  border: 1px solid rgba(23, 107, 98, 0.15);
+  border-radius: 12px;
+  color: #49635b;
+  font-size: 11.5px;
+  line-height: 1.5;
 }
 
 .landing-honesty-note svg {
-  color: var(--forest)
+  color: var(--forest);
+  flex-shrink: 0;
 }
 
 .landing-network-section {
@@ -1280,26 +1319,18 @@
 
   .landing-workflow-track {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0 28px
+    gap: 16px;
+    margin-top: 36px
   }
 
   .landing-workflow-step {
-    border-right: 0;
-    border-bottom: 1px solid rgba(23, 107, 98, .2);
-    padding-bottom: 27px
+    min-height: 0;
+    gap: 12px;
+    padding: 20px 18px
   }
 
-  .landing-workflow-step:not(:first-child) {
-    padding-left: 0
-  }
-
-  .landing-workflow-step:not(:last-child) {
-    margin-right: 0
-  }
-
-  .landing-workflow-step:nth-last-child(-n+2) {
-    border-bottom: 0;
-    margin-top: 28px
+  .landing-workflow-step:last-child {
+    grid-column: 1 / -1
   }
 
   .landing-network-section {
@@ -1462,7 +1493,11 @@
   .landing-section-heading h2,
   .landing-network-panel h2,
   .landing-closing-cta h2 {
-    font-size: clamp(37px, 11vw, 52px)
+    font-size: clamp(26px, 7.5vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
 
   .landing-filter-row {
@@ -1485,41 +1520,65 @@
   }
 
   .landing-workflow {
-    padding-left: 17px;
-    padding-right: 17px
+    padding-left: 16px;
+    padding-right: 16px
   }
 
   .landing-workflow-track {
-    grid-template-columns: 1fr;
-    margin-top: 43px
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 28px
   }
 
-  .landing-workflow-step,
-  .landing-workflow-step:nth-last-child(-n+2) {
-    min-height: 0;
-    margin: 0 !important;
-    border-bottom: 1px solid rgba(23, 107, 98, .2);
-    padding: 21px 0 21px 49px
+  .landing-workflow-step {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: var(--paper);
+    border: 1px solid rgba(23, 107, 98, 0.15);
+    box-shadow: 0 2px 8px rgba(30, 40, 35, 0.04)
   }
 
-  .landing-workflow-step:first-child {
-    padding-top: 21px
+  .landing-workflow-step-marker {
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0
   }
 
-  .landing-workflow-step:last-child {
-    border-bottom: 0
+  .landing-workflow-step-number {
+    width: 32px;
+    height: 32px;
+    font-size: 11px
   }
 
-  .landing-workflow-step>span {
-    position: absolute;
-    left: 0;
-    top: 21px;
-    margin: 0
+  .landing-workflow-step-icon {
+    width: 26px;
+    height: 26px
+  }
+
+  .landing-workflow-step-body {
+    flex: 1;
+    min-width: 0
+  }
+
+  .landing-workflow-step-body h3 {
+    font-size: 15px;
+    margin-bottom: 4px
+  }
+
+  .landing-workflow-step-body p {
+    font-size: 12px;
+    line-height: 1.5
   }
 
   .landing-honesty-note {
     align-items: flex-start;
-    line-height: 1.5
+    padding: 12px 14px;
+    font-size: 11px
   }
 
   .landing-network-section {
